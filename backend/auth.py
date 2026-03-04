@@ -16,8 +16,27 @@ ACCESS_TOKEN_EXPIRE_MINUTES = 30
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="auth/login")
 
-# Mock Database
-users_db = {}
+import json
+import os
+
+# Persistent Database File
+DB_FILE = "users.json"
+
+def load_users():
+    if not os.path.exists(DB_FILE):
+        return {}
+    try:
+        with open(DB_FILE, "r") as f:
+            return json.load(f)
+    except:
+        return {}
+
+def save_users(users):
+    with open(DB_FILE, "w") as f:
+        json.dump(users, f)
+
+# Load users at startup
+users_db = load_users()
 
 class User(BaseModel):
     username: str
@@ -48,6 +67,7 @@ async def register(username: str, password: str):
         raise HTTPException(status_code=400, detail="Username already registered")
     hashed_password = get_password_hash(password)
     users_db[username] = {"username": username, "hashed_password": hashed_password}
+    save_users(users_db)
     return {"message": "User created successfully"}
 
 @router.post("/login", response_model=Token)
