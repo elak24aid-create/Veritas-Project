@@ -45,6 +45,10 @@ class User(BaseModel):
 class UserInDB(User):
     hashed_password: str
 
+class UserCreate(BaseModel):
+    username: str
+    password: str
+
 class Token(BaseModel):
     access_token: str
     token_type: str
@@ -62,7 +66,9 @@ def create_access_token(data: dict):
     return jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
 
 @router.post("/register")
-async def register(username: str, password: str):
+async def register(user_data: UserCreate):
+    username = user_data.username
+    password = user_data.password
     if username in users_db:
         raise HTTPException(status_code=400, detail="Username already registered")
     hashed_password = get_password_hash(password)

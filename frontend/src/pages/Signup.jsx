@@ -10,18 +10,17 @@ const Signup = () => {
     const handleSignup = async (e) => {
         e.preventDefault();
         try {
-            const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
-            await axios.post(`${apiBaseUrl}/auth/register`, null, {
-                params: {
-                    username: formData.username,
-                    password: formData.password
-                }
+            const apiBaseUrl = (import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000').replace(/\/$/, '');
+            await axios.post(`${apiBaseUrl}/auth/register`, {
+                username: formData.username,
+                password: formData.password
             });
             alert('Account created! Please login.');
             navigate('/login');
         } catch (err) {
-            console.error(err);
-            alert(err.response?.data?.detail || 'Signup failed. Please try again.');
+            console.error('Signup Error:', err);
+            const errorMessage = err.response?.data?.detail || err.message || 'Signup failed. Please try again.';
+            alert(`Error: ${errorMessage}`);
         }
     };
 
