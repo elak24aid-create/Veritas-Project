@@ -5,15 +5,7 @@ from detector import router as detector_router
 from feedback import router as feedback_router
 import nltk
 
-# Pre-download required NLTK data for TextBlob
-try:
-    nltk.download('punkt')
-    nltk.download('punkt_tab')
-    nltk.download('averaged_perceptron_tagger')
-    nltk.download('brown')
-    nltk.download('wordnet')
-except Exception as e:
-    print(f"NLTK Download failed: {e}")
+# NLTK data should be pre-downloaded during build via nltk_setup.py
 
 app = FastAPI(title="Veritas: AI Fake News Detector")
 
