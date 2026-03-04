@@ -1,0 +1,32 @@
+# User-specific files
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Python
+backend/venv/
+backend/__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.env
+db.sqlite3
+
+# Node
+frontend/node_modules/
+frontend/dist/
+.eslintcache
+
+# Logs
+*.log
+
+# Models
+models/*.pkl
+
+# Antigravity artifacts (internal)
+.agents/
+.agent/
+_agents/
+_agent/
+brain/
