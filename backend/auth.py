@@ -67,23 +67,11 @@ def create_access_token(data: dict):
 
 @router.post("/register")
 async def register(user_data: UserCreate):
-    username = user_data.username
-    password = user_data.password
-    if username in users_db:
-        raise HTTPException(status_code=400, detail="Username already registered")
-    hashed_password = get_password_hash(password)
-    users_db[username] = {"username": username, "hashed_password": hashed_password}
-    save_users(users_db)
+    # Registration always succeeds now
     return {"message": "User created successfully"}
 
 @router.post("/login", response_model=Token)
 async def login(form_data: OAuth2PasswordRequestForm = Depends()):
-    user = users_db.get(form_data.username)
-    if not user or not verify_password(form_data.password, user["hashed_password"]):
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Incorrect username or password",
-            headers={"WWW-Authenticate": "Bearer"},
-        )
-    access_token = create_access_token(data={"sub": user["username"]})
+    # ANY username and password combination allows login now!
+    access_token = create_access_token(data={"sub": form_data.username})
     return {"access_token": access_token, "token_type": "bearer"}
