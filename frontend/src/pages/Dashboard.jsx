@@ -214,12 +214,13 @@ const Dashboard = () => {
                 ? { url: input }
                 : { text: input };
 
-            const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
+            const apiBaseUrl = (import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000').replace(/\/$/, '');
             const token = localStorage.getItem('token');
             const res = await axios.post(`${apiBaseUrl}/api/detect`, payload, {
                 headers: {
                     'Authorization': token ? `Bearer ${token}` : ''
-                }
+                },
+                timeout: 30000 // 30 seconds to allow for Render cold starts
             });
             const data = res.data.data;
             setResult(data);
@@ -241,8 +242,9 @@ const Dashboard = () => {
 
         } catch (err) {
             console.error(err);
+            const apiBaseUrl = (import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000').replace(/\/$/, '');
             const detail = err.response?.data?.detail || err.message;
-            setError(`Detection failed: ${detail}. Please check if the backend is running and all models are loaded.`);
+            setError(`Detection failed: ${detail}. (Tried: ${apiBaseUrl}). Please check if the Render Backend URL is correct in your Environment Settings.`);
         } finally {
             setLoading(false);
         }
