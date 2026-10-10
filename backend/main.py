@@ -5,9 +5,7 @@ from detector import router as detector_router
 from feedback import router as feedback_router
 import nltk
 
-# NLTK data should be pre-downloaded during build via nltk_setup.py
-
-app = FastAPI(title="Veritas: AI Fake News Detector")
+app = FastAPI(title="TruthLens: AI Truth Verification Platform")
 
 # CORS Configuration
 app.add_middleware(
@@ -24,4 +22,9 @@ app.include_router(feedback_router, prefix="/api/feedback", tags=["Feedback"])
 
 @app.get("/")
 async def root():
-    return {"message": "Veritas API is running"}
+    return {
+        "message": "TruthLens API is running",
+        "app": "TruthLens",
+        "version": "2.4",
+        "status": "online"
+    }

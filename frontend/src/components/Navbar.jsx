@@ -16,7 +16,7 @@ const Navbar = () => {
         <nav className="glass m-4 px-6 py-4 flex items-center justify-between">
             <Link to="/" className="flex items-center gap-2 text-xl font-bold text-primary">
                 <Shield size={28} />
-                <span>Veritas</span>
+                <span>FNDS</span>
             </Link>
 
             <div className="flex items-center gap-6">
