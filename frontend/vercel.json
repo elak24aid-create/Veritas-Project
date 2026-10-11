@@ -1,4 +1,5 @@
 {
+  "name": "truthlens",
   "rewrites": [
     {
       "source": "/api/:path*",
