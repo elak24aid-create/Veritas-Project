@@ -1,5 +1,5 @@
 fastapi
-uvicorn
+uvicorn[standard]
 gunicorn
 python-jose[cryptography]
 passlib[bcrypt]
@@ -13,3 +13,7 @@ textblob
 sqlalchemy
 pillow
 reportlab
+joblib
+numpy
+scipy
+onnxruntime

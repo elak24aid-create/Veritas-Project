@@ -5,6 +5,7 @@ import axios from 'axios';
 axios.defaults.headers.common['bypass-tunnel-reminder'] = 'true';
 axios.defaults.headers.common['Bypass-Tunnel-Reminder'] = 'true';
 
+export const RENDER_API_URL = 'https://truthlens-api.onrender.com';
 export const CLOUD_TUNNEL_URL = 'https://cute-lamps-itch.loca.lt';
 export const LOCAL_WIFI_URL = 'http://10.48.35.23:8000';
 export const EMULATOR_URL = 'http://10.0.2.2:8000';
@@ -40,7 +41,6 @@ export const getApiBaseUrl = () => {
 
     // 4. Remote Web Production (e.g., Vercel https://*.vercel.app)
     if (isRemoteWeb() || isHttpsOrigin()) {
-        // Vercel rewrites proxy /api and /auth to backend, or direct to Cloud Tunnel
         return CLOUD_TUNNEL_URL;
     }
 
@@ -87,11 +87,12 @@ export const testServerConnection = async (specificUrl = null) => {
         }
     }
 
-    // Test candidate endpoints in order: Saved -> Cloud Tunnel -> Local Wi-Fi -> Localhost
+    // Test candidate endpoints in order: Saved -> Cloud Tunnel -> Render Cloud -> Local Wi-Fi -> Localhost
     const saved = localStorage.getItem('truthlens_custom_api_url');
     const rawCandidates = [
         saved,
         CLOUD_TUNNEL_URL,
+        RENDER_API_URL,
         LOCAL_WIFI_URL,
         LOCAL_WEB_URL,
         EMULATOR_URL
@@ -126,6 +127,7 @@ export const apiRequest = async (endpoint, options = {}) => {
     const rawCandidates = [
         primary,
         CLOUD_TUNNEL_URL,
+        RENDER_API_URL,
         LOCAL_WIFI_URL,
         LOCAL_WEB_URL,
         EMULATOR_URL

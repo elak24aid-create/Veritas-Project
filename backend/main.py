@@ -4,6 +4,14 @@ from auth import router as auth_router
 from detector import router as detector_router
 from feedback import router as feedback_router
 import nltk
+try:
+    nltk.download('punkt', quiet=True)
+    nltk.download('punkt_tab', quiet=True)
+    nltk.download('averaged_perceptron_tagger', quiet=True)
+    nltk.download('wordnet', quiet=True)
+    nltk.download('brown', quiet=True)
+except Exception:
+    pass
 
 app = FastAPI(title="TruthLens: AI Truth Verification Platform")
 
