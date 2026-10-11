@@ -3,7 +3,7 @@
 
 ---
 
-# TABLE OF CONTENTS
+# CONTENTS
 
 | CHAPTER NO. | INDEX | PAGE NO. |
 | :---: | :--- | :---: |
@@ -14,36 +14,38 @@
 | | 1.3 System Specification | 4 |
 | | &emsp;&emsp;1.3.1 Hardware Configuration | 4 |
 | | &emsp;&emsp;1.3.2 Software Specification | 5 |
-| **II** | **SYSTEM STUDY** | 7 |
-| | 2.1 Existing System | 7 |
-| | &emsp;&emsp;2.1.1 Drawbacks of Existing System | 8 |
-| | 2.2 Proposed System | 10 |
-| | &emsp;&emsp;2.2.1 Features of Proposed System | 11 |
-| **III** | **SYSTEM DESIGN AND DEVELOPMENT** | 14 |
-| | 3.1 File Design | 14 |
-| | 3.2 Input Design | 17 |
-| | 3.3 Output Design | 19 |
-| | 3.4 System Development | 22 |
-| | &emsp;&emsp;3.4.1 Description of Modules | 23 |
-| **IV** | **SOFTWARE TESTING AND IMPLEMENTATION** | 29 |
-| **V** | **CONCLUSION AND FUTURE ENHANCEMENT** | 35 |
-| **VI** | **BIBLIOGRAPHY** | 38 |
-| **VII** | **APPENDICES** | 41 |
-| | A. Data Flow Diagram (DFD Level 0, 1, 2) | 41 |
-| | B. Table Structure (Database Schema) | 45 |
-| | C. Sample Code | 48 |
-| | D. Sample Input | 54 |
-| | E. Sample Output | 56 |
+| | &emsp;&emsp;&emsp;&emsp;1.3.2.1 Software Features | 6 |
+| **II** | **SYSTEM STUDY** | 8 |
+| | 2.1 Existing System | 8 |
+| | &emsp;&emsp;2.1.1 Drawbacks of Existing System | 9 |
+| | 2.2 Proposed System | 11 |
+| | &emsp;&emsp;2.2.1 Features of Proposed System | 12 |
+| **III** | **SYSTEM DESIGN AND DEVELOPMENT** | 15 |
+| | 3.1 Input Design | 15 |
+| | 3.2 Database Design | 18 |
+| | 3.3 Output Design | 21 |
+| | 3.4 System Development | 24 |
+| | &emsp;&emsp;3.4.1 Description of Modules | 25 |
+| **IV** | **SOFTWARE TESTING AND IMPLEMENTATION** | 31 |
+| **V** | **CONCLUSION AND FUTURE ENHANCEMENT** | 37 |
+| **VI** | **BIBLIOGRAPHY** | 40 |
+| **VII** | **APPENDICES** | 43 |
+| | A. Data Flow Diagram | 43 |
+| | B. ER Diagram | 47 |
+| | C. Sample Input | 50 |
+| | D. Table Structure | 52 |
+| | E. Sample Output | 55 |
+| | F. Sample Coding | 58 |
 
 ---
 
 # ABSTRACT
 
-The proliferation of online digital media, social networks, and instantaneous communication channels has catalyzed the dissemination of misinformation, disinformation, and fabricated news stories at an unprecedented velocity. Digital manipulation is no longer restricted to plain text; modern disinformation campaigns deploy multimodal deceptive artifacts comprising synthetic diffusion imagery (deepfakes), deceptive visual screenshots, voice audio claims, and fabricated uniform resource locators (URLs). Traditional detection frameworks suffer from severe structural shortcomings: they are typically unimodal, lack real-time web cross-verification, produce uncalibrated binary outputs without explainability, and fail to provide seamless cross-platform accessibility across mobile and desktop environments.
+The exponential proliferation of digital media, social networks, and instantaneous messaging applications has catalyzed the dissemination of misinformation, disinformation, and fabricated news stories at an unprecedented velocity. Digital manipulation is no longer restricted to plain text; modern disinformation campaigns deploy multimodal deceptive artifacts comprising synthetic diffusion imagery (deepfakes), deceptive visual screenshots, voice audio claims, and fabricated uniform resource locators (URLs). Traditional detection frameworks suffer from severe structural shortcomings: they are typically unimodal, lack real-time web cross-verification, produce uncalibrated binary outputs without explainability, and fail to provide seamless cross-platform accessibility across mobile and cloud environments.
 
 This project presents **TruthLens**, an advanced, cross-platform, AI-powered multimodal truth verification platform designed to evaluate and verify information across multiple modalities: **Text Statements**, **Article URLs**, **Image Optical Character Recognition (OCR) & Forensic Visual Media**, and **Spoken Voice Claims**. 
 
-TruthLens integrates a calibrated Machine Learning Natural Language Processing (NLP) classification pipeline with an active real-time online journalistic research engine that queries live fact-checking networks (Snopes, AFP Fact Check, PolitiFact, FACTLY, BOOM, Alt News, BBC Verify) and accredited global news registries. For visual media analysis, the platform employs a forensic vision suite combining Meta's Perception Encoder (`PE-Core Tiny`) ONNX neural network, 2D Fast Fourier Transform (FFT) azimuthal power spectrum frequency analysis, Error Level Analysis (ELA), and hardware EXIF inspection. To serve diverse demographic populations, TruthLens delivers complete multilingual internationalization across 20 languages and an automated 5-minute refreshing live news feed categorized into 11 distinct domains. The application is deployed across Windows Desktop (Electron), Web (React/Vite), and Android Mobile devices (Capacitor Native APK) supported by an intelligent multi-tier networking fallback cascade. Empirical evaluations demonstrate high classification fidelity, robustness against adversarial prompts, and transparent explainability through forensic evidence citations and downloadable verification certificates.
+TruthLens integrates a calibrated Machine Learning Natural Language Processing (NLP) classification pipeline with an active real-time online journalistic research engine that queries live fact-checking networks (Snopes, AFP Fact Check, PolitiFact, FACTLY, BOOM, Alt News, BBC Verify) and accredited global news registries. For visual media analysis, the platform employs a forensic vision suite combining Meta's Perception Encoder (`PE-Core Tiny`) ONNX neural network, 2D Fast Fourier Transform (FFT) azimuthal power spectrum frequency analysis, Error Level Analysis (ELA), and hardware EXIF inspection. To serve diverse demographic populations, TruthLens delivers complete multilingual internationalization across 20 languages and an automated 5-minute refreshing live news feed categorized into 11 distinct domains. The application is deployed across cloud infrastructure (Vercel CDN Edge and Render Cloud Container), Windows Desktop (Electron), and Android Mobile devices (Capacitor Native APK) supported by an intelligent multi-tier networking fallback cascade. Empirical evaluations demonstrate high classification fidelity, robustness against adversarial prompts, and transparent explainability through forensic evidence citations and downloadable verification certificates.
 
 ---
 
@@ -65,14 +67,14 @@ Furthermore, TruthLens moves beyond black-box classification by generating struc
 
 ## 1.2 Organization Profile
 
-This project was developed under the aegis of the **Advanced Artificial Intelligence and Software Systems Laboratory**, in collaboration with the **Veritas Project Initiative**. 
+This project was developed under the aegis of the **Advanced Artificial Intelligence and Software Systems Laboratory**, in collaboration with the **Veritas Project Initiative**.
 
 The Veritas Project Initiative is an academic and research-driven consortium focused on digital forensics, ethical machine learning, algorithmic transparency, and combating digital disinformation. The research team comprises software architects, data scientists, and computational linguists dedicated to creating open-source tools that empower citizens, students, journalists, and media researchers to evaluate the credibility of information before amplification.
 
 Key mandates of the organization include:
 - Designing explainable AI (XAI) models that prioritize user trust through transparent citations.
 - Bridging the linguistic divide by supporting regional and vernacular languages in AI tools.
-- Developing resilient software architectures capable of seamless execution across resource-constrained edge devices and mobile platforms.
+- Developing resilient software architectures capable of seamless execution across resource-constrained edge devices, mobile platforms, and global cloud networks.
 
 ## 1.3 System Specification
 
@@ -80,7 +82,7 @@ Key mandates of the organization include:
 
 The system is designed with an optimized computing footprint, allowing local inference and web-scale request handling on standard consumer-grade workstations and mobile devices.
 
-#### A. Development & Server Environment
+#### A. Development & Cloud Server Environment
 - **Processor**: Intel Core i5 (8th Gen or above) / AMD Ryzen 5 3600 (Hexa-Core) or higher
 - **Clock Speed**: 2.5 GHz base clock, up to 4.2 GHz turbo
 - **System Memory (RAM)**: 8 GB minimum (16 GB recommended for concurrent neural ONNX inference)
@@ -105,7 +107,7 @@ TruthLens is constructed using modern, industry-standard software frameworks ens
 - **Operating System**: Microsoft Windows 11 / Windows 10 (64-bit) / Linux Ubuntu 22.04 LTS
 - **Runtime Environment**: Python 3.11.x
 - **Web Application Framework**: FastAPI v0.133.0 (Asynchronous ASGI framework)
-- **ASGI Server**: Uvicorn v0.41.0
+- **ASGI Server**: Uvicorn v0.41.0 with Gunicorn process management
 - **Machine Learning & NLP**:
   - Scikit-Learn v1.8.0 (CalibratedClassifierCV, LogisticRegression, TfidfVectorizer)
   - TextBlob v0.19.0 (Sentiment polarity and subjectivity analysis)
@@ -117,18 +119,30 @@ TruthLens is constructed using modern, industry-standard software frameworks ens
   - SciPy v1.17.1 (2D Fast Fourier Transform frequency domain decomposition)
 - **Database**: SQLite 3 with SQLAlchemy v2.0.54 Object-Relational Mapper (ORM)
 - **Document Generation**: ReportLab v5.0.1 (Dynamic PDF Certificate generation)
-- **Tunneling**: Node.js Localtunnel proxy for cross-network mobile ingress
+- **Cloud Deployment**: Render.com (Python Container Web Service) & Node.js Localtunnel ingress
 
 #### B. Client Web & Mobile Environment
 - **JavaScript Runtime**: Node.js v20.x LTS with NPM v10.x
 - **Frontend Framework**: React 18 with Vite v5.4.21 build toolchain
+- **Cloud Edge Hosting**: Vercel Global Edge CDN
 - **Styling & UI**: Tailwind CSS v3.4 with Lucide React iconography
 - **Mobile Container**: Capacitor v7.0 (Android Native Runtime Bridge)
 - **Desktop Container**: Electron v30.x (Chromium/Node desktop wrapper)
 - **Client-Side OCR**: Tesseract.js v5.x (WebAssembly-powered OCR engine)
 - **Speech Engine**: Web Speech API (`webkitSpeechRecognition`)
 - **HTTP Client**: Axios v1.7.x with custom automatic fallback interceptors
-- **Build Tools**: Android Studio Hedgehog / Iguana, Android SDK Platform 34, OpenJDK 17 (JBR)
+- **Build Tools**: Android Studio, Android SDK Platform 34, OpenJDK 17 (JBR)
+
+#### 1.3.2.1 Software Features
+
+1. **Multimodal Analysis Engine**: Supports simultaneous evaluation of Text, Article URLs, Images (OCR + Deepfake Forensics), and Voice claims.
+2. **Real-Time Fact-Check Grounding**: Live queries to verified fact-checking registries (Snopes, AFP Fact Check, PolitiFact, FACTLY, BOOM, Alt News, BBC Verify).
+3. **Neural Deepfake Detection**: Meta's Perception Encoder (`PE-Core Tiny`) ONNX model combined with ELA and 2D FFT frequency analysis.
+4. **Multilingual Live News Feed**: Live RSS stream categorized into 11 domains with 5-minute automated countdown refresh and language filtering.
+5. **Full Internationalization (i18n)**: 20 supported languages with instant client-side localization toggle.
+6. **Cross-Platform Deployment**: Accessible as a responsive Web App on Vercel, a Standalone Windows Desktop App, and a native Android APK (`TruthLens.apk`).
+7. **Verifiable Audit & PDF Certification**: Instant PDF generation with cryptographic audit IDs and verifiable trust scores.
+8. **Intelligent Network Failover**: Automatic client-side connectivity routing across Saved Cloud, Render, Localtunnel, LAN Wi-Fi, and Localhost.
 
 ---
 
@@ -178,8 +192,8 @@ TruthLens functions as an automated intelligence suite that unifies real-time ma
                                        |
                                        v
 +-----------------------------------------------------------------------------------+
-|  FRONTEND CONTROLLER & ADAPTIVE API ROUTER (React / Capacitor / Electron)         |
-|  - Intelligent Multi-Tier Network Cascade: Saved -> Tunnel -> LAN -> Localhost   |
+|  FRONTEND CONTROLLER & ADAPTIVE API ROUTER (React / Capacitor / Vercel Edge)      |
+|  - Intelligent Multi-Tier Network Cascade: Vercel -> Render -> Tunnel -> Local   |
 |  - Client-Side Tesseract.js OCR & Real-Time Web Speech Transcription Engine       |
 +-----------------------------------------------------------------------------------+
                                        |
@@ -213,125 +227,129 @@ TruthLens functions as an automated intelligence suite that unifies real-time ma
 
 ### 2.2.1 Features of Proposed System
 
-The proposed TruthLens platform provides the following core features:
-
-1. **Multimodal Verification Pipeline**:
-   Users can analyze claims via four flexible input channels: direct plain text typing, article URL submission (with automated server-side web scraping), image upload (with neural vision deepfake detection and client-side Tesseract.js OCR), and direct voice claims via microphone.
-2. **Real-Time Live Web Journalistic Research**:
-   TruthLens does not rely solely on static training weights. For every submitted text or voice claim, the backend dynamically queries live online Google News RSS feeds and queries accredited fact-checking databases (**Snopes**, **AFP Fact Check**, **PolitiFact**, **FACTLY**, **BOOM**, **Alt News**, and **BBC Verify**) to discover if the claim has already been debunked or corroborated.
-3. **Comprehensive Image Forensic & Deepfake Suite**:
-   Images are evaluated through a multi-tiered forensic visual analysis suite:
-   - **Perception Encoder Neural Vision**: ONNX-accelerated deep vision model trained to differentiate generative diffusion textures from authentic CMOS sensors.
-   - **Error Level Analysis (ELA)**: Re-compresses the image at known JPEG compression rates to identify regional gradient discrepancies indicative of digital splicing.
-   - **2D Fast Fourier Transform (FFT)**: Performs frequency domain decomposition to detect periodic grid artifacts and generative upsampling artifacts.
-   - **Hardware EXIF Verification**: Validates camera make, exposure, and hardware timestamps.
-4. **Live Multilingual News Feed with 5-Minute Auto-Refresh**:
-   A dedicated Home dashboard displays real-time verified news fetched directly from accredited Google News RSS feeds across **11 categories** (All, Political, Healthcare, Science, Government, Crime, World, India, Weather, Sports, Business) and **multiple languages** (Tamil, English, Hindi, Malayalam, Japanese, Telugu, Kannada, Bengali, etc.). The feed auto-syncs every 300 seconds with an active countdown ticker and instant manual refresh.
-5. **Real-Time Voice Claim Transcription**:
-   Users who cannot type can speak their claim into the microphone. Using continuous interim speech recognition, spoken words appear dynamically on the screen in real time before submission.
-6. **20-Language Full UI Localization**:
-   The entire application interface supports instant translation across 20 global and regional Indian languages (English, Tamil, Hindi, Telugu, Malayalam, Kannada, Bengali, Marathi, Gujarati, Punjabi, Urdu, Spanish, French, German, Italian, Portuguese, Russian, Japanese, Chinese, Arabic).
-7. **Multi-Tier Mobile Network Failover Cascade**:
-   Physical Android devices connect reliably to the AI backend using an automated cascade: Custom Saved IP $\to$ Cloud Localtunnel (`https://cute-lamps-itch.loca.lt`) $\to$ Local Wi-Fi (`http://10.48.35.23:8000`) $\to$ Android Emulator $\to$ Localhost.
-8. **Automated PDF Verification Certificate Generator**:
-   Generates formal, printable verification certificates complete with credibility trust scores, sentiment polarity ratings, and evidence citations suitable for academic reporting or social dispute resolution.
+1. **Multimodal Verification Pipeline**: Ingestion of direct text statements, web links, visual media, and spoken audio claims through specialized processing channels.
+2. **Real-Time Live Web Journalistic Research**: Direct queries to Google News RSS and accredited fact-checking databases (**Snopes**, **AFP Fact Check**, **PolitiFact**, **FACTLY**, **BOOM**, **Alt News**, and **BBC Verify**) to discover if a claim has been debunked or corroborated.
+3. **Four-Tiered Image Forensic Suite**:
+   - **Perception Encoder Neural Vision**: ONNX model identifying generative diffusion textures.
+   - **Error Level Analysis (ELA)**: Re-compression analysis identifying digital splices and manipulated regions.
+   - **2D Fast Fourier Transform (FFT)**: Frequency domain decomposition exposing artificial frequency spikes and checkerboard artifacts.
+   - **Hardware EXIF Verification**: Camera metadata and hardware sensor inspection.
+4. **Live Multilingual News Feed with 5-Minute Auto-Refresh**: Real-time breaking news across **11 categories** with automatic 300-second countdown syncing and language filtering.
+5. **Real-Time Voice Claim Transcription**: Hands-free voice claims using continuous speech recognition with interim result streaming.
+6. **20-Language Full UI Localization**: Instant translation across 20 languages including Tamil, Hindi, Malayalam, Telugu, Kannada, Bengali, and English.
+7. **Cloud & Multi-Tier Mobile Network Failover Cascade**: Native Android app connects dynamically across Render Cloud, Vercel, Localtunnel, and Local Wi-Fi.
+8. **Automated PDF Verification Certificate Generator**: Production of formal cryptographic-style verification certificates complete with credibility scores and evidence citations.
 
 ---
 
 # CHAPTER III: SYSTEM DESIGN AND DEVELOPMENT
 
-## 3.1 File Design
+## 3.1 Input Design
 
-The physical storage architecture of TruthLens is structured into a clean separation of database tables, serialized machine learning models, static neural weights, and client-side configuration caches.
-
-### 3.1.1 Database File Architecture (`fnds.db`)
-TruthLens employs an embedded SQLite database managed via SQLAlchemy ORM. The database file is located at `backend/fnds.db`. SQLite was selected for its zero-configuration deployment, ACID compliance, serverless operation, and cross-platform portability.
-
-The database manages three primary relational tables:
-1. `users`: Stores user authentication credentials, investigator status, and profile metadata.
-2. `detection_history`: Stores comprehensive audit logs of all analyses performed across all modalities (Text, URL, Image OCR, Voice Claim).
-3. `daily_news`: Caches live verified news headlines, publication dates, and source URLs to support lightning-fast dashboard rendering and offline fallback.
-4. `feedback_reports`: Stores user dispute reports and corrections for manual audit and model retraining.
-
-### 3.1.2 Model Files & Assets Directory (`models/`)
-The analytical machine learning and computer vision models are stored in serialized, portable binary formats:
-- `models/fake_news_model.pkl`: Serialized `CalibratedClassifierCV` wrapper containing balanced logistic regression estimators trained on the 675-sample multimodal disinformation dataset.
-- `models/tfidf_vectorizer.pkl`: Serialized `TfidfVectorizer` containing 8,000 unigram and bigram vocabulary mappings with sublinear term-frequency scaling.
-- `models/ai_image_detector.onnx`: Meta Perception Encoder (`PE-Core Tiny`) vision weights in Open Neural Network Exchange (ONNX) format for cross-platform deepfake classification.
-
-### 3.1.3 Frontend Directory Structure (`frontend/`)
-The client codebase is structured according to component-driven design principles:
-```
-frontend/
-├── android/                   # Capacitor Native Android Studio project
-│   ├── app/src/main/
-│   │   ├── AndroidManifest.xml # Permissions (INTERNET, RECORD_AUDIO, CAMERA)
-│   │   └── java/.../MainActivity.java # WebChromeClient permission overrides
-├── src/
-│   ├── assets/                # Logos, SVG icons, static media
-│   ├── pages/
-│   │   └── Dashboard.jsx      # Primary monolithic UI view containing all 5 tabs
-│   ├── config.js              # Intelligent multi-tier API request router
-│   ├── i18n.js                # 20-language translation dictionary mappings
-│   ├── index.css              # Tailwind CSS directives and custom scrollbars
-│   └── App.jsx                # Application root container and routing
-├── electron.cjs               # Electron main process wrapper for desktop
-├── capacitor.config.json      # Native Capacitor bridge configuration
-└── package.json               # Frontend dependencies and build scripts
-```
-
-## 3.2 Input Design
-
-Input design is focused on user experience, ergonomics, and robust validation to ensure that irregular user inputs do not disrupt downstream processing.
-
-TruthLens implements four specialized input interfaces:
+Input design focuses on ergonomics, validation, and accessibility across all client devices. TruthLens implements four dedicated input modules:
 
 ### 1. Text Claim Input Design
-- **Component**: Multiline, autoscaling `<textarea>` with placeholder prompt text.
-- **Controls**: Integrated "Paste from Clipboard" button, character length indicator, and Quick Example pills (e.g. "NASA 15 Days Darkness", "Lemon Cancer Cure", "5G Immune Suppression").
+- **Component**: Multiline, responsive `<textarea>` with placeholder prompt text.
+- **Controls**: "Paste from Clipboard" button, character length indicator, and Quick Example pills.
 - **Validation Rules**: Minimum length of 5 characters; maximum length capped at 5,000 characters to prevent buffer saturation.
 
 ### 2. URL Input Design
 - **Component**: Single-line text input field styled with a link icon.
-- **Controls**: "Paste Link" clipboard action button.
-- **Validation Rules**: Must comply with standard URI formatting (`http://` or `https://`). The backend utilizes BeautifulSoup with a realistic browser User-Agent header and an 8-second request timeout to scrape up to 3,000 characters of readable paragraph text.
+- **Controls**: "Paste Link" action button.
+- **Validation Rules**: Standard URI formatting (`http://` or `https://`). The backend utilizes BeautifulSoup with an 8-second request timeout to scrape up to 3,000 characters of readable paragraph text.
 
 ### 3. Image OCR & Deepfake Forensic Input Design
 - **Component**: Drag-and-drop file upload zone coupled with a native hidden `<input type="file" accept="image/*">`.
-- **Controls**: "Choose Image or Photo" action button, instant client-side image preview container, real-time OCR extraction container, and removal button.
-- **Validation Rules**: Accepts standard image formats (JPEG, PNG, WebP, BMP). File size is verified to be greater than 10 bytes and less than 25 megabytes. Client-side OCR allows immediate verification of extracted headlines before network transmission.
+- **Controls**: "Choose Image or Photo" action button, instant image preview container, real-time OCR extraction container, and removal button.
+- **Validation Rules**: Accepts JPEG, PNG, WebP, BMP formats. File size verified between 10 bytes and 25 MB. Client-side OCR allows immediate verification of extracted headlines before network transmission.
 
 ### 4. Voice Claim Microphone Input Design
-- **Component**: High-visibility interactive microphone action button with animated pulsing soundwave rings.
-- **Controls**: Microphone toggle switch, language dialect selector dropdown, and a real-time transcription container ("Words You Spoke").
+- **Component**: Interactive microphone action button with animated pulsing soundwave rings.
+- **Controls**: Microphone toggle switch, dialect selector dropdown, and a real-time transcription container ("Words You Spoke").
 - **Validation Rules**: Triggers browser and native Android `RECORD_AUDIO` permission prompts; dynamically maps the selected application language to corresponding BCP-47 speech recognition codes (e.g., `ta-IN` for Tamil, `hi-IN` for Hindi, `en-US` for English).
+
+## 3.2 Database Design
+
+TruthLens employs an embedded SQLite database managed via SQLAlchemy Object-Relational Mapping (ORM) located at `backend/fnds.db`. SQLite guarantees zero-configuration deployment, ACID compliance, serverless operation, and cross-platform portability.
+
+The logical schema comprises four core relational entities:
+
+```
++---------------------------------------------------------------------------------+
+|                               DATABASE SCHEMAS                                  |
++---------------------------------------------------------------------------------+
+|  USERS                                                                          |
+|  - id (PK, Integer, Auto)                                                       |
+|  - username (VarChar 50, Unique, Not Null)                                      |
+|  - email (VarChar 100, Unique, Not Null)                                        |
+|  - hashed_password (VarChar 255, Not Null)                                      |
+|  - role (VarChar 20, Default 'Investigator')                                    |
+|  - created_at (DateTime, CurrentTimestamp)                                      |
++---------------------------------------------------------------------------------+
+                                      |
+                                      | 1 : N
+                                      v
++---------------------------------------------------------------------------------+
+|  DETECTION_HISTORY                                                              |
+|  - id (PK, Integer, Auto)                                                       |
+|  - user_id (FK -> users.id, Nullable)                                           |
+|  - username (VarChar 50, Default 'elak24aid')                                   |
+|  - input_type (VarChar 30, Not Null)                                            |
+|  - content (Text, Not Null)                                                     |
+|  - prediction (VarChar 20, Not Null)                                            |
+|  - probability (Float, Not Null)                                                |
+|  - credibility_score (Float, Not Null)                                          |
+|  - sentiment (VarChar 20, Default 'Neutral')                                    |
+|  - reasons_json (Text, Nullable)                                                |
+|  - timestamp (DateTime, CurrentTimestamp)                                       |
++---------------------------------------------------------------------------------+
+
++---------------------------------------------------------------------------------+
+|  DAILY_NEWS                                                                     |
+|  - id (PK, Integer, Auto)                                                       |
+|  - title (Text, Not Null)                                                       |
+|  - category (VarChar 50, Indexed)                                               |
+|  - source_name (VarChar 100, Not Null)                                          |
+|  - source_url (Text, Not Null)                                                  |
+|  - content (Text, Nullable)                                                     |
+|  - is_verified (Boolean, Default 1)                                             |
+|  - published_date (VarChar 50, Not Null)                                        |
++---------------------------------------------------------------------------------+
+
++---------------------------------------------------------------------------------+
+|  FEEDBACK_REPORTS                                                               |
+|  - id (PK, Integer, Auto)                                                       |
+|  - user_id (FK -> users.id, Nullable)                                           |
+|  - prediction (VarChar 20, Not Null)                                            |
+|  - user_feedback (Text, Not Null)                                               |
+|  - content_snippet (Text, Not Null)                                             |
+|  - timestamp (DateTime, CurrentTimestamp)                                       |
++---------------------------------------------------------------------------------+
+```
 
 ## 3.3 Output Design
 
-The output design of TruthLens delivers comprehensive transparency, actionable clarity, and visual impact. Rather than presenting a simplistic percentage or binary label, the output is structured into an **Investigation Verdict Dossier**:
+The output interface is designed to deliver immediate visual comprehension, evidence citations, and formal auditability through an **Investigation Verdict Dossier**:
 
 ### 1. Assessment Score Header Card
-- **Real Verdict**: Rendered in calming emerald green tones (`#f0fdf4`) with a bold green badge: **"Authentic / Real"**.
-- **Fake Verdict**: Rendered in high-visibility alert red tones (`#fef2f2`) with a bold crimson badge: **"Misinformation / Fake"**.
-- **Credibility Confidence Meter**: Prominently displays the calibrated probability percentage (e.g., `98.0% Confidence`) alongside a numerical Trust Score scaled from `0.0` to `10.0`.
+- **Real Verdict**: Rendered in emerald green styling with a bold badge: **"Authentic / Real"**.
+- **Fake Verdict**: Rendered in alert crimson styling with a bold badge: **"Misinformation / Fake"**.
+- **Confidence & Credibility Score**: Prominently displays the calibrated percentage (e.g., `98.0% Confidence`) alongside a numerical Trust Score (scaled `0.0` to `10.0`).
 
 ### 2. Forensic Evidence Citations Module
-- Dynamically renders interactive citation cards linking directly to live fact-checks and news publications.
-- Each citation displays the source name (e.g. *Snopes*, *AFP Fact Check*, *Reuters*, *NASA Science*), the publication date, and an evidence classification badge:
-  - `DEBUNK_CITATION`: Direct debunking investigation by an accredited fact-checker.
-  - `DIRECT_SUPPORT`: Corroborating reporting by an accredited journalistic agency.
-  - `CONTEXTUAL`: Background context regarding named entities.
+- Displays interactive citation cards linking directly to live fact-checks and news publications.
+- Each citation specifies the publisher name (e.g., *Snopes*, *AFP Fact Check*, *Reuters*, *The Hindu*), the publication timestamp, and an evidence tag (`DEBUNK_CITATION`, `DIRECT_SUPPORT`, or `CONTEXTUAL`).
 
 ### 3. Forensic Reasoning Breakdown
-- Bulleted list detailing every diagnostic signal detected by the system:
+- Diagnostic signals list detailing:
   - Neural ML NLP Classifier confidence breakdown.
-  - Sensationalism and clickbait lexical triggers identified.
-  - Frequency domain (FFT) and compression (ELA) forensic findings for images.
+  - Sensationalism, clickbait, and hoax lexical triggers detected.
+  - Frequency domain (FFT) and compression (ELA) forensic findings for uploaded visual media.
   - Journalistic database corroboration status.
 
 ### 4. Downloadable PDF Verification Certificate
-- Formally styled verification certificate generated on-demand using ReportLab.
-- Contains the official Veritas seal, verification timestamp, unique certificate ID, detailed reasons, credibility score, and institutional signature space.
+- Styled verification certificate generated on-demand using ReportLab.
+- Features the official Veritas seal, verification timestamp, unique certificate ID, detailed reasons, credibility score, and institutional signature space.
 
 ```
 +-------------------------------------------------------------------------------+
@@ -359,11 +377,9 @@ The output design of TruthLens delivers comprehensive transparency, actionable c
 
 ### 3.4.1 Description of Modules
 
-TruthLens is architected into six cohesive, decoupled functional modules:
-
 #### Module 1: Core FastAPI Routing & Asynchronous Controller (`main.py`, `detector.py`)
 - Acts as the central gateway for all incoming API requests.
-- Implements Cross-Origin Resource Sharing (CORS) middleware to allow seamless requests from mobile applications, local network IPs, cloud tunnels, and web browsers.
+- Implements Cross-Origin Resource Sharing (CORS) middleware to allow requests from mobile applications, local network IPs, cloud tunnels, and web browsers.
 - Exposes RESTful endpoints:
   - `POST /api/detect`: Evaluates text, URL, and voice claims.
   - `POST /api/detect-image`: Ingests multipart image files for neural vision and forensic deepfake scanning.
@@ -376,14 +392,14 @@ TruthLens is architected into six cohesive, decoupled functional modules:
 - Implements text preprocessing, tokenization, and linguistic normalization.
 - Feature extraction is performed via Scikit-Learn's `TfidfVectorizer` configured with sublinear term-frequency scaling and unigram/bigram tokenization:
   $$\text{TF-IDF}(t, d, D) = (1 + \log(\text{TF}(t, d))) \times \log\left(\frac{1 + |D|}{1 + |\{d \in D : t \in d\}|}\right) + 1$$
-- Classification is performed using a calibrated logistic regression model (`CalibratedClassifierCV`) with 3-fold cross-validation. Calibrated probabilities ensure that outputs reflect true empirical likelihoods rather than uncalibrated margin distances.
+- Classification is performed using a calibrated logistic regression model (`CalibratedClassifierCV`) with 3-fold cross-validation. Calibrated probabilities ensure that outputs reflect true empirical likelihoods.
 
 #### Module 3: Live Journalistic Web Research & Fact-Check Engine (`live_research.py`)
 - Executes asynchronous queries to Google News RSS search endpoints.
 - Implements automated detection of fact-check investigations by querying `{claim} fact check OR hoax OR debunk`.
 - Scans article titles for explicit debunk indicators (`false`, `falsely`, `debunk`, `hoax`, `untrue`, `busted`, `no evidence`, `doesn't kill`).
 - Prioritizes investigations from recognized International Fact-Checking Network (IFCN) signatories (Snopes, AFP Fact Check, PolitiFact, FACTLY, BOOM, Alt News, BBC Verify).
-- When a claim has zero journalistic coverage across global wire services, flags the claim as uncorroborated rather than generating misleading placeholder citations.
+- Flags uncorroborated claims when no matching coverage exists across global news registries.
 
 #### Module 4: Neural Vision Deepfake & Forensic Analysis Suite (`image_forensics.py`)
 - Analyzes uploaded visual media using a four-pronged forensic approach:
@@ -391,7 +407,7 @@ TruthLens is architected into six cohesive, decoupled functional modules:
   2. **Error Level Analysis (ELA)**: Computes the difference between original image pixels and a version re-compressed at a 90% JPEG quality factor. Synthetic diffusion images exhibit unnatural uniform error distributions, whereas authentic photographs show characteristic high-frequency compression noise around edges.
   3. **2D Fast Fourier Transform (FFT) Frequency Analysis**: Converts image channels to grayscale and computes the 2D discrete Fourier transform:
      $$F(u, v) = \sum_{x=0}^{M-1} \sum_{y=0}^{N-1} f(x, y) e^{-j 2\pi \left(\frac{ux}{M} + \frac{vy}{N}\right)}$$
-     Evaluates the azimuthal power spectrum for telltale harmonic spikes and lattice upsampling artifacts typical of generative adversarial networks (GANs) and diffusion models.
+     Evaluates the azimuthal power spectrum for harmonic spikes and lattice upsampling artifacts typical of GANs and diffusion models.
   4. **Sensor Noise Residual & Hardware EXIF**: Measures high-frequency sensor noise variance and inspects hardware camera tags.
 
 #### Module 5: Multilingual Live News Engine & Auto-Refresh Daemon (`live_research.py`)
@@ -399,11 +415,12 @@ TruthLens is architected into six cohesive, decoupled functional modules:
 - Maps language codes (`ta`, `en`, `hi`, `ml`, `ja`, `te`, `kn`, `bn`, etc.) to Google News locale configurations (`hl`, `gl`, `ceid`).
 - Implements a decoupled 300-second client-side interval timer that automatically synchronizes fresh news headlines without page reloads.
 
-#### Module 6: Cross-Platform Native Mobile & Desktop Bridge (`config.js`, Capacitor, Electron)
+#### Module 6: Cloud Deployment & Cross-Platform Native Bridge (`config.js`, Vercel, Render, Capacitor)
+- **Vercel Edge Frontend**: Hosts the React user interface on global edge CDNs ([`https://truthlens-six-cyan.vercel.app`](https://truthlens-six-cyan.vercel.app)) with reverse-proxy rewrites routing `/api/` and `/auth/` requests.
+- **Render Cloud Backend**: Runs the Python FastAPI backend container 24/7 in the cloud (`https://truthlens-api.onrender.com`).
 - **Intelligent Fallback Cascade**: Manages network requests via an adaptive failover engine that tests multiple candidate endpoints in priority sequence:
-  $$\text{Custom IP} \longrightarrow \text{Cloud Tunnel (loca.lt)} \longrightarrow \text{Local Wi-Fi (LAN)} \longrightarrow \text{Localhost}$$
-- **Native Android Bridge**: Configured with Android permissions (`RECORD_AUDIO`, `CAMERA`, `READ_MEDIA_IMAGES`, `INTERNET`) and custom `WebChromeClient.onPermissionRequest` handlers in `MainActivity.java` to grant seamless microphone access inside the native WebView container.
-- **Desktop Electron Container**: Wraps the web application in a native Chromium process with fixed desktop phone dimensions (440 x 920) and automated background server startup.
+  $$\text{Saved Cloud} \longrightarrow \text{Cloud Tunnel (loca.lt)} \longrightarrow \text{Render API} \longrightarrow \text{Local Wi-Fi (LAN)} \longrightarrow \text{Localhost}$$
+- **Native Android APK (`TruthLens.apk`)**: Configured with Android runtime permissions (`RECORD_AUDIO`, `CAMERA`, `READ_MEDIA_IMAGES`, `INTERNET`) and custom `WebChromeClient.onPermissionRequest` handlers in `MainActivity.java` to grant seamless microphone access inside the native WebView container.
 
 ---
 
@@ -459,8 +476,8 @@ By moving beyond traditional, rigid, unimodal text classifiers, TruthLens provid
 1. **Multimodal Flexibility**: Seamless ingestion and verification of text headlines, article URLs, spoken voice claims, and visual media within a single unified interface.
 2. **Deepfake Visual Forensics**: Elimination of the blind spot surrounding AI-generated images through Meta's Perception Encoder ONNX neural model, Error Level Analysis (ELA), and 2D Fast Fourier Transform (FFT) frequency analysis.
 3. **Real-Time Web Corroboration**: Direct integration with live fact-checking networks (Snopes, AFP Fact Check, PolitiFact, FACTLY, BOOM) and accredited wire services, solving the "fact-checking lag" and preventing outdated training models from misclassifying breaking news.
-4. **Overhauled Detection Accuracy**: Completely eliminated the bias that previously caused fake news to be categorized as real, ensuring that fabricated claims are identified with 88% – 98% confidence.
-5. **Cross-Platform Mobility**: Successful deployment as a standalone Windows Desktop application (Electron) and a compiled native Android mobile app (`TruthLens.apk`) backed by an intelligent multi-tier networking cascade.
+4. **Calibrated Detection Accuracy**: Completely eliminated the bias that previously caused fake news to be categorized as real, ensuring that fabricated claims are identified with 88% – 98% confidence.
+5. **Cross-Platform Mobility & Cloud Scalability**: Deployed as a global cloud web app on Vercel, a 24/7 cloud container on Render, and a native compiled Android mobile app (`TruthLens.apk`).
 6. **Democratic Linguistic Inclusion**: Full user interface localization across 20 global and regional Indian languages, coupled with multilingual live news feeds in Tamil, Hindi, Malayalam, Telugu, and English.
 
 In summary, TruthLens serves as a reliable, production-ready forensic tool that equips regular citizens, journalists, and researchers with the verification capabilities needed to navigate the modern information landscape.
@@ -469,16 +486,11 @@ In summary, TruthLens serves as a reliable, production-ready forensic tool that 
 
 While TruthLens achieves its core objectives, future iterations can expand its analytical depth and architectural scale through the following prospective enhancements:
 
-1. **Video Deepfake & Audio Synthetic Voice Clone Detection**:
-   Extend the forensic suite to ingest video files (MP4, AVI) to detect facial manipulation using frame-by-frame temporal consistency networks (such as 3D-CNNs or MesoNet) and detect AI voice cloning using mel-spectrogram acoustic artifact classifiers.
-2. **Graph Neural Network (GNN) Social Propagation Modeling**:
-   Incorporate social network propagation graphs to analyze how a piece of news spreads across social networks (retweet cascades, bot cluster amplification, coordination networks) to detect coordinated disinformation campaigns before content analysis alone.
-3. **Decentralized Blockchain-Backed Fact Registry**:
-   Integrate a decentralized ledger (such as Ethereum or Polygon) to timestamp and record verification certificates permanently on-chain, preventing censorship or retroactive modification of fact-check verdicts.
-4. **Offline Edge-AI Neural Inference on Mobile**:
-   Quantize the neural vision and NLP models into TensorFlow Lite (TFLite) or ONNX Mobile formats to allow lightweight, basic verification directly on the handheld device without requiring an active internet connection.
-5. **Automated WhatsApp / Telegram Fact-Checking Bot**:
-   Develop a conversational webhook daemon allowing users to forward viral messages directly to a TruthLens WhatsApp Business or Telegram bot for instant automated credibility assessment.
+1. **Video Deepfake & Audio Synthetic Voice Clone Detection**: Extend the forensic suite to ingest video files (MP4, AVI) to detect facial manipulation using frame-by-frame temporal consistency networks (such as 3D-CNNs or MesoNet) and detect AI voice cloning using mel-spectrogram acoustic artifact classifiers.
+2. **Graph Neural Network (GNN) Social Propagation Modeling**: Incorporate social network propagation graphs to analyze how a piece of news spreads across social networks (retweet cascades, bot cluster amplification, coordination networks) to detect coordinated disinformation campaigns before content analysis alone.
+3. **Decentralized Blockchain-Backed Fact Registry**: Integrate a decentralized ledger (such as Ethereum or Polygon) to timestamp and record verification certificates permanently on-chain, preventing censorship or retroactive modification of fact-check verdicts.
+4. **Offline Edge-AI Neural Inference on Mobile**: Quantize the neural vision and NLP models into TensorFlow Lite (TFLite) or ONNX Mobile formats to allow lightweight, basic verification directly on the handheld device without requiring an active internet connection.
+5. **Automated WhatsApp / Telegram Fact-Checking Bot**: Develop a conversational webhook daemon allowing users to forward viral messages directly to a TruthLens WhatsApp Business or Telegram bot for instant automated credibility assessment.
 
 ---
 
@@ -575,17 +587,136 @@ flowchart TD
     E1 --> Output([User Result Screen])
 ```
 
+### 3. DFD Level 2 (Sub-Process Detail: Detection Ensemble)
+
+```mermaid
+flowchart TD
+    RawClaim[Raw Ingested Claim] --> TextNormalize[Text Normalization & Tokenization]
+    TextNormalize --> TFIDF[TF-IDF Feature Matrix]
+    TFIDF --> MLInference[Calibrated Logistic Regression]
+    
+    RawClaim --> LexicalScan[Sensationalism & Clickbait Rule Engine]
+    LexicalScan --> LexicalFlags[Urgency & Scam Flags]
+    
+    RawClaim --> WebDispatch[Async Google News Query Dispatcher]
+    WebDispatch --> FactCheckMatcher{Match IFCN Fact-Check?}
+    
+    FactCheckMatcher -- "Yes (Debunk Found)" --> DebunkWeight[Apply Override: 94% - 98% Fake]
+    FactCheckMatcher -- "No Match" --> WireMatcher{Accredited Wire Match?}
+    
+    WireMatcher -- "Yes (Corroborated)" --> RealWeight[Apply Corroboration: 92% - 99% Real]
+    WireMatcher -- "No (Uncorroborated)" --> RiskWeight[Flag as Unverified: Risk Penalty]
+    
+    MLInference & LexicalFlags & DebunkWeight & RealWeight & RiskWeight --> EnsembleFusion[Weighted Probability Fusion Algorithm]
+    EnsembleFusion --> FinalVerdict[Final Categorical Verdict & Credibility Score]
+```
+
 ---
 
-## Appendix B: Table Structure (Database Schema)
+## Appendix B: ER Diagram
 
-### Table 1: `detection_history`
-Stores the complete audit trail of user verification analyses across all input modalities.
+The Entity-Relationship (ER) diagram models the conceptual and logical database architecture of TruthLens, capturing relationships between registered users, their multi-modal verification analyses, automated daily news cache entries, and community feedback audit submissions.
 
+```mermaid
+erDiagram
+    USERS ||--o{ DETECTION_HISTORY : executes
+    USERS ||--o{ FEEDBACK_REPORTS : submits
+
+    USERS {
+        int id PK "Auto Increment"
+        string username "Unique, Indexed"
+        string email "Unique, Contact"
+        string hashed_password "Bcrypt Salted Hash"
+        string role "User / Investigator / Admin"
+        datetime created_at "Registration Timestamp"
+    }
+
+    DETECTION_HISTORY {
+        int id PK "Auto Increment"
+        int user_id FK "References USERS(id)"
+        string username "Auditor Identifier"
+        string input_type "Text / URL / Image OCR / Voice"
+        text content "Evaluated Statement or Summary"
+        string prediction "Real or Fake"
+        float probability "Calibrated Percentage"
+        float credibility_score "Trust Index 0.0 - 10.0"
+        string sentiment "Positive / Negative / Neutral"
+        text reasons_json "Serialized Diagnostic Evidence"
+        datetime timestamp "Analysis Timestamp"
+    }
+
+    DAILY_NEWS {
+        int id PK "Auto Increment"
+        text title "Headline String"
+        string category "Political / Science / Sports etc."
+        string source_name "Accredited News Publisher"
+        text source_url "Canonical Web Article Link"
+        text content "Preview Excerpt"
+        boolean is_verified "Accredited Media Flag"
+        string published_date "Relative Timestamp"
+    }
+
+    FEEDBACK_REPORTS {
+        int id PK "Auto Increment"
+        int user_id FK "References USERS(id)"
+        string prediction "Disputed Model Label"
+        text user_feedback "Audit Comment / Correction"
+        text content_snippet "Excerpt of Contested Claim"
+        datetime timestamp "Submission Timestamp"
+    }
+```
+
+### Entity Relationship Descriptions:
+1. **USERS Entity**: Holds profile data, encrypted passwords, and user privileges. One user can perform multiple analyses (`1:N` relationship with `DETECTION_HISTORY`).
+2. **DETECTION_HISTORY Entity**: Stores immutable forensic audit logs for every evaluated statement across all four input modalities. Each record links to its diagnostic evidence reasons.
+3. **DAILY_NEWS Entity**: Standalone caching entity updated by background tasks to power the live 11-category feed and ensure fast loading without blocking user analyses.
+4. **FEEDBACK_REPORTS Entity**: Tracks user dispute submissions (`1:N` relationship with `USERS`), providing a feedback loop for continuous supervised dataset enhancement.
+
+---
+
+## Appendix C: Sample Input
+
+### Case 1: Plain Text Fake Rumor Input
+```text
+Drinking boiled lemon water with garlic cures all cancers completely and eliminates cancer cells overnight! Forward to everyone!
+```
+
+### Case 2: Article URL Input
+```text
+https://www.thehindu.com/sci-tech/science/isro-chandrayaan-3-lunar-south-pole-landing-details/article67228834.ece
+```
+
+### Case 3: Image OCR & Deepfake Forensic Input
+- **File Name**: `protest_rally_edited.jpg`
+- **File Format**: `image/jpeg`
+- **Resolution**: `1080 x 1350 pixels`
+- **Extracted Text (via Tesseract.js)**: *"Massive protest breaks out in city center as thousands storm parliament building."*
+
+### Case 4: Spoken Voice Claim Audio Input
+- **Audio Stream**: Spoken audio via device microphone.
+- **Language Mode**: Tamil (`ta-IN`)
+- **Speech Transcript**: *"செவ்வாய் கிரகத்தில் மனிதர்கள் வாழ்வதற்கு ஏற்ற நீர்நிலைகள் கண்டுபிடிக்கப்பட்டுள்ளது"* (Translation: "Water bodies suitable for human habitation have been discovered on Mars.")
+
+---
+
+## Appendix D: Table Structure
+
+### Table 1: `users`
+| Column Name | Data Type | Constraints | Description |
+| :--- | :--- | :--- | :--- |
+| `id` | INTEGER | PRIMARY KEY, AUTOINCREMENT | Unique user account record identifier |
+| `username` | VARCHAR(50) | UNIQUE, NOT NULL | Unique login and investigator handle |
+| `email` | VARCHAR(100) | UNIQUE, NOT NULL | Contact email address |
+| `hashed_password` | VARCHAR(255) | NOT NULL | Bcrypt salted cryptographic password hash |
+| `role` | VARCHAR(20) | DEFAULT 'Investigator' | User permission level ('User', 'Investigator', 'Admin') |
+| `created_at` | DATETIME | DEFAULT CURRENT_TIMESTAMP | Account creation date and time |
+
+### Table 2: `detection_history`
 | Column Name | Data Type | Constraints | Description |
 | :--- | :--- | :--- | :--- |
 | `id` | INTEGER | PRIMARY KEY, AUTOINCREMENT | Unique record identification number |
-| `username` | VARCHAR(50) | NOT NULL, DEFAULT 'elak24aid' | User identifier or investigator name |
+| `user_id` | INTEGER | FOREIGN KEY, NULLABLE | References `users.id` |
+| `username` | VARCHAR(50) | NOT NULL, DEFAULT 'elak24aid' | User identifier or investigator handle |
 | `input_type` | VARCHAR(30) | NOT NULL | Modality ('Text', 'URL', 'Image OCR', 'Voice Claim') |
 | `content` | TEXT | NOT NULL | Investigated text claim, URL, or image summary |
 | `prediction` | VARCHAR(20) | NOT NULL | Final verdict ('Real' or 'Fake') |
@@ -595,9 +726,7 @@ Stores the complete audit trail of user verification analyses across all input m
 | `reasons_json` | TEXT | NULLABLE | JSON-encoded array of diagnostic evidence strings |
 | `timestamp` | DATETIME | DEFAULT CURRENT_TIMESTAMP | Date and time analysis was executed |
 
-### Table 2: `daily_news`
-Stores cached verified live news articles for high-speed dashboard rendering and offline support.
-
+### Table 3: `daily_news`
 | Column Name | Data Type | Constraints | Description |
 | :--- | :--- | :--- | :--- |
 | `id` | INTEGER | PRIMARY KEY, AUTOINCREMENT | Unique news article identification number |
@@ -609,12 +738,11 @@ Stores cached verified live news articles for high-speed dashboard rendering and
 | `is_verified` | BOOLEAN | DEFAULT 1 | Verification flag confirming authentic accredited source |
 | `published_date` | VARCHAR(50) | NOT NULL | Relative publication timestamp (e.g. '28 mins ago') |
 
-### Table 3: `feedback_reports`
-Stores user-submitted dispute reviews and verification corrections.
-
+### Table 4: `feedback_reports`
 | Column Name | Data Type | Constraints | Description |
 | :--- | :--- | :--- | :--- |
 | `id` | INTEGER | PRIMARY KEY, AUTOINCREMENT | Unique report identifier |
+| `user_id` | INTEGER | FOREIGN KEY, NULLABLE | References `users.id` |
 | `prediction` | VARCHAR(20) | NOT NULL | Model prediction under dispute |
 | `user_feedback` | TEXT | NOT NULL | Detailed user rationale or dispute explanation |
 | `content_snippet` | TEXT | NOT NULL | Snippet of the evaluated claim |
@@ -622,7 +750,97 @@ Stores user-submitted dispute reviews and verification corrections.
 
 ---
 
-## Appendix C: Sample Code
+## Appendix E: Sample Output
+
+### Case 1: Assessment Output for Viral Fake Rumor
+```json
+{
+  "status": "success",
+  "data": {
+    "prediction": "Fake",
+    "probability": 98.0,
+    "credibility_score": 0.2,
+    "sentiment": "Neutral",
+    "reasons": [
+      "Neural ML Classifier Probability: 0.1% Real vs 99.9% Fake",
+      "Sensationalist / hoax keywords detected: 'cures all, boiled lemon, overnight'",
+      "Fact-Check Investigation (AFP Fact Check): 'Drinking hot lemon water does not kill cancer cells - AFP Fact Check'",
+      "Claim has been investigated and flagged as FALSE / DEBUNKED by independent fact-checkers."
+    ],
+    "citations": [
+      {
+        "source": "AFP Fact Check",
+        "title": "Drinking hot lemon water doesn't kill cancer cells - AFP Fact Check",
+        "url": "https://factcheck.afp.com/drinking-hot-lemon-water-doesnt-kill-cancer-cells",
+        "badge": "DEBUNK_CITATION"
+      }
+    ]
+  }
+}
+```
+
+### Case 2: Assessment Output for Verified Real News
+```json
+{
+  "status": "success",
+  "data": {
+    "prediction": "Real",
+    "probability": 98.98,
+    "credibility_score": 9.9,
+    "sentiment": "Positive",
+    "reasons": [
+      "Neural ML Classifier Probability: 97.4% Real vs 2.6% Fake",
+      "Claim is corroborated by multiple accredited global news publications.",
+      "Accredited Reporting (The Hindu): 'ISRO Chandrayaan-3 successfully touches down on Moon south pole'",
+      "Accredited Reporting (BBC News): 'India makes historic landing near Moon south pole with Chandrayaan-3'"
+    ],
+    "citations": [
+      {
+        "source": "The Hindu",
+        "title": "ISRO Chandrayaan-3 successfully touches down on Moon south pole",
+        "url": "https://www.thehindu.com/sci-tech/science/isro-chandrayaan-3-lunar-south-pole-landing-details/article67228834.ece",
+        "badge": "DIRECT_SUPPORT"
+      },
+      {
+        "source": "BBC News",
+        "title": "India makes historic landing near Moon south pole with Chandrayaan-3",
+        "url": "https://www.bbc.com/news/world-asia-india-66594520",
+        "badge": "DIRECT_SUPPORT"
+      }
+    ]
+  }
+}
+```
+
+### Case 3: Assessment Output for AI Deepfake Visual Media
+```json
+{
+  "status": "success",
+  "data": {
+    "prediction": "Fake (AI-Generated Image)",
+    "probability": 93.4,
+    "credibility_score": 0.6,
+    "ai_generated": true,
+    "forensics": {
+      "pe_core_score": 0.941,
+      "fft_spectral_energy": 0.887,
+      "ela_discrepancy": 0.912,
+      "sensor_noise_present": false,
+      "camera_exif_found": false
+    },
+    "reasons": [
+      "Perception Encoder (PE-Core) deep vision model classified image as synthetic diffusion media (94.1% probability).",
+      "2D FFT frequency analysis detected unnatural lattice grid artifacts indicative of generative upsampling.",
+      "Error Level Analysis (ELA) shows uniform synthetic compression gradient across pixel boundaries.",
+      "Image contains zero hardware camera EXIF sensor metadata."
+    ]
+  }
+}
+```
+
+---
+
+## Appendix F: Sample Coding
 
 ### 1. Decision Ensemble Classification Pipeline (`backend/detector.py`)
 
@@ -639,9 +857,11 @@ async def detect_news(input_data: NewsInput, db: Session = Depends(get_db)):
     ml_fake_prob = 0.5
     if ml_model and tfidf_vectorizer:
         vec = tfidf_vectorizer.transform([content])
-        probs = ml_model.predict_proba(vec)[0] # [P(Real), P(Fake)]
+        probs = ml_model.predict_proba(vec)[0]  # [P(Real), P(Fake)]
         ml_fake_prob = probs[1]
-        reasons.append(f"Neural ML Classifier Probability: {round(probs[0]*100, 1)}% Real vs {round(probs[1]*100, 1)}% Fake")
+        reasons.append(
+            f"Neural ML Classifier Probability: {round(probs[0]*100, 1)}% Real vs {round(probs[1]*100, 1)}% Fake"
+        )
 
     # Layer 2: Sensationalism & Clickbait Lexical Analyzer
     sens_score, sens_flags = analyze_sensationalism(content)
@@ -691,38 +911,71 @@ async def detect_news(input_data: NewsInput, db: Session = Depends(get_db)):
     }
 ```
 
-### 2. Multi-Tier Adaptive Network Failover Cascade (`frontend/src/config.js`)
+### 2. Forensic Image Analysis & 2D FFT Frequency Decomposition (`backend/image_forensics.py`)
+
+```python
+def compute_fft_spectral_energy(image_path: str) -> float:
+    """
+    Computes 2D Fast Fourier Transform frequency domain decomposition
+    to detect telltale harmonic spikes characteristic of generative diffusion upsampling.
+    """
+    img = Image.open(image_path).convert('L')
+    img_np = np.array(img, dtype=np.float32)
+
+    # 2D Discrete Fast Fourier Transform
+    f = np.fft.fft2(img_np)
+    fshift = np.fft.fftshift(f)
+    magnitude_spectrum = 20 * np.log(np.abs(fshift) + 1e-8)
+
+    h, w = magnitude_spectrum.shape
+    center_y, center_x = h // 2, w // 2
+
+    # High frequency outer radius mask
+    y, x = np.ogrid[:h, :w]
+    dist_from_center = np.sqrt((x - center_x)**2 + (y - center_y)**2)
+    outer_mask = dist_from_center > (min(h, w) * 0.35)
+
+    high_freq_energy = np.mean(magnitude_spectrum[outer_mask])
+    normalized_score = float(np.clip(high_freq_energy / 120.0, 0.0, 1.0))
+    return normalized_score
+```
+
+### 3. Multi-Tier Adaptive Network Failover Cascade (`frontend/src/config.js`)
 
 ```javascript
 export const apiRequest = async (endpoint, options = {}) => {
     const primary = getApiBaseUrl();
-    const candidateBases = [
+    const rawCandidates = [
         primary,
         CLOUD_TUNNEL_URL,
+        RENDER_API_URL,
         LOCAL_WIFI_URL,
-        EMULATOR_URL,
-        LOCAL_WEB_URL
+        LOCAL_WEB_URL,
+        EMULATOR_URL
     ];
-    
-    const bases = Array.from(new Set(candidateBases.filter(Boolean)));
+
+    const validCandidates = filterCandidatesForEnvironment(rawCandidates);
+    const bases = Array.from(new Set(validCandidates));
+
     let lastErr = null;
+    const perAttemptTimeout = options.timeout || 12000;
 
     for (const base of bases) {
         try {
             const cleanBase = base.replace(/\/$/, '');
             const cleanEndpoint = endpoint.startsWith('/') ? endpoint : `/${endpoint}`;
             const fullUrl = `${cleanBase}${cleanEndpoint}`;
-            
+
             const config = {
                 url: fullUrl,
-                timeout: options.timeout || 30000,
+                timeout: perAttemptTimeout,
                 headers: {
                     'bypass-tunnel-reminder': 'true',
                     ...(options.headers || {})
                 },
                 ...options
             };
-            
+
             const response = await axios(config);
             if (base !== primary) {
                 setCustomApiUrl(base);
@@ -737,124 +990,4 @@ export const apiRequest = async (endpoint, options = {}) => {
     }
     throw lastErr;
 };
-```
-
----
-
-## Appendix D: Sample Input
-
-### Case 1: Plain Text Fake Rumor Input
-```text
-Drinking boiled lemon water with garlic cures all cancers completely and eliminates cancer cells overnight! Forward to everyone!
-```
-
-### Case 2: Article URL Input
-```text
-https://www.nasa.gov/universe/webb-reveals-deep-universe/
-```
-
-### Case 3: Spoken Voice Claim Transcript
-```text
-"NASA confirms Earth will enter 15 days of complete darkness this December."
-```
-
-### Case 4: Image OCR Input
-An uploaded screenshot showing a viral social media card with the text:
-```text
-"Government announces 15 lakh rupees will be deposited into every citizen bank account immediately!"
-```
-
----
-
-## Appendix E: Sample Output
-
-### 1. API Response Payload for Fake Claim (`Drinking lemon water cures cancer`)
-```json
-{
-  "status": "success",
-  "data": {
-    "prediction": "Fake",
-    "probability": 98.0,
-    "sentiment": "Neutral",
-    "sentiment_score": 0.05,
-    "subjectivity_score": 0.42,
-    "reasons": [
-      "Neural ML Classifier Probability: 0.1% Real vs 99.9% Fake",
-      "Sensationalist / hoax keywords detected: 'cures all, boiled lemon, lemon water'",
-      "Multiple exclamation marks used for emotional triggering",
-      "Independent Fact-Checker (AFP Fact Check): \"Drinking hot lemon water doesn't kill cancer cells - AFP Fact Check\"",
-      "Claim has been investigated and flagged as FALSE / DEBUNKED by independent fact-checkers."
-    ],
-    "explanation": "Neural ML classification and live fact-checking indicate unverified or misleading claims.",
-    "title": "Drinking boiled lemon water with garlic cures all cancers completely",
-    "publisher": "Independent Source",
-    "deep_research_summary": "Independent fact-checking databases flag this claim as DEBUNKED / FALSE with 2 matching investigations.",
-    "citations": [
-      {
-        "source": "AFP Fact Check",
-        "title": "Drinking hot lemon water doesn't kill cancer cells - AFP Fact Check",
-        "url": "https://factcheck.afp.com/doc.afp.com.33649X4",
-        "date": "14 hours ago",
-        "evidence_type": "DEBUNK_CITATION"
-      },
-      {
-        "source": "FACTLY",
-        "title": "No scientific basis for claims of curing cancer with hot lemon water - FACTLY",
-        "url": "https://factly.in/fake-cancer-cures",
-        "date": "1 day ago",
-        "evidence_type": "DEBUNK_CITATION"
-      }
-    ],
-    "detailed_report": {
-      "word_count": 18,
-      "language": "EN",
-      "credibility_score": 0.2
-    }
-  }
-}
-```
-
-### 2. API Response Payload for Real News (`Chandrayaan-3 Lunar Landing`)
-```json
-{
-  "status": "success",
-  "data": {
-    "prediction": "Real",
-    "probability": 98.98,
-    "sentiment": "Positive",
-    "sentiment_score": 0.45,
-    "subjectivity_score": 0.22,
-    "reasons": [
-      "Neural ML Classifier Probability: 93.2% Real vs 6.8% Fake",
-      "Content cross-references verified institutional publications.",
-      "Objective reporting structure detected.",
-      "Claim is corroborated by accredited mainstream news organizations (6 references)."
-    ],
-    "explanation": "Online evidence supports and verifies the core claims.",
-    "title": "ISRO successfully landed Chandrayaan-3 near the lunar south pole",
-    "publisher": "Accredited Agency",
-    "deep_research_summary": "Accredited journalism databases report verified coverage related to this topic across 6 major publications.",
-    "citations": [
-      {
-        "source": "Aerospace America",
-        "title": "ISRO Wins AIAA Highest Honor for Chandrayaan-3 Moon Landing",
-        "url": "https://aerospaceamerica.aiaa.org/chandrayaan-3",
-        "date": "2 hours ago",
-        "evidence_type": "DIRECT_SUPPORT"
-      },
-      {
-        "source": "The Space Review",
-        "title": "Chandrayaan-3 successfully undertakes lunar flybys and surface operations",
-        "url": "https://thespacereview.com/chandrayaan3-success",
-        "date": "5 hours ago",
-        "evidence_type": "DIRECT_SUPPORT"
-      }
-    ],
-    "detailed_report": {
-      "word_count": 10,
-      "language": "EN",
-      "credibility_score": 9.9
-    }
-  }
-}
 ```
