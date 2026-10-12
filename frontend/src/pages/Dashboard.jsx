@@ -196,6 +196,15 @@ const Dashboard = () => {
 
     // Load initial data
     useEffect(() => {
+        // Automatically purge any stale local/laptop IPs from phone localStorage so app never gets stuck
+        try {
+            const saved = localStorage.getItem('truthlens_custom_api_url') || localStorage.getItem('fnds_custom_api_url');
+            if (saved && (saved.includes('10.48.') || saved.includes('192.168.') || saved.includes('loca.lt') || saved.includes('localhost'))) {
+                localStorage.removeItem('truthlens_custom_api_url');
+                localStorage.removeItem('fnds_custom_api_url');
+            }
+        } catch (e) {}
+
         testServerConnection().then(online => {
             setServerOnline(online);
             setServerUrl(getApiBaseUrl());

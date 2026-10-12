@@ -13,7 +13,14 @@ export default function handler(req, res) {
 
     let body = req.body || {};
     if (typeof body === "string") {
-        try { body = JSON.parse(body); } catch (e) {}
+        try {
+            body = JSON.parse(body);
+        } catch (e) {
+            try {
+                const params = new URLSearchParams(body);
+                body = Object.fromEntries(params.entries());
+            } catch (e2) {}
+        }
     }
 
     const username = (body.username || "elak24aid").trim();

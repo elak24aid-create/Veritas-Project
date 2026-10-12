@@ -31,20 +31,25 @@ export const isRemoteWeb = () => {
 };
 
 export const getApiBaseUrl = () => {
-    // 1. User custom saved server URL in settings
+    // 1. Native Mobile App -> ALWAYS connect directly to 24/7 Global Cloud Backend!
+    // Never get trapped by stale laptop/hotspot IPs when phone is at college or outside.
+    if (isNativeApp()) {
+        const savedUrl = localStorage.getItem('truthlens_custom_api_url') || localStorage.getItem('fnds_custom_api_url');
+        if (savedUrl && savedUrl.startsWith('https://') && !savedUrl.includes('loca.lt')) {
+            return savedUrl.trim().replace(/\/$/, '');
+        }
+        return VERCEL_CLOUD_URL;
+    }
+
+    // 2. User custom saved server URL in settings (for browser / local development)
     const savedUrl = localStorage.getItem('truthlens_custom_api_url') || localStorage.getItem('fnds_custom_api_url');
-    if (savedUrl && savedUrl.trim()) {
+    if (savedUrl && savedUrl.trim() && !savedUrl.includes('10.48.') && !savedUrl.includes('loca.lt')) {
         return savedUrl.trim().replace(/\/$/, '');
     }
 
-    // 2. Check environment variable (VITE_API_BASE_URL)
+    // 3. Check environment variable (VITE_API_BASE_URL)
     if (import.meta.env.VITE_API_BASE_URL) {
         return import.meta.env.VITE_API_BASE_URL.trim().replace(/\/$/, '');
-    }
-
-    // 3. Native Mobile App -> Default to 24/7 Global Cloud Backend so it works ANYWHERE without laptop!
-    if (isNativeApp()) {
-        return VERCEL_CLOUD_URL;
     }
 
     // 4. Remote Web Production (Vercel)
