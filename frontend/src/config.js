@@ -11,6 +11,14 @@ export const LOCAL_WIFI_URL = 'http://10.48.35.23:8000';
 export const EMULATOR_URL = 'http://10.0.2.2:8000';
 export const LOCAL_WEB_URL = 'http://localhost:8000';
 
+export const isNativeApp = () => {
+    return typeof window !== 'undefined' && !!(
+        window.Capacitor ||
+        (window.location && window.location.protocol === 'capacitor:') ||
+        (typeof navigator !== 'undefined' && navigator.userAgent && navigator.userAgent.includes('Android') && !window.location.hostname.includes('vercel.app'))
+    );
+};
+
 export const isHttpsOrigin = () => {
     return typeof window !== 'undefined' && window.location && window.location.protocol === 'https:';
 };
@@ -33,10 +41,9 @@ export const getApiBaseUrl = () => {
         return import.meta.env.VITE_API_BASE_URL.trim().replace(/\/$/, '');
     }
 
-    // 3. Mobile / Capacitor app
-    const isMobile = !!(window.Capacitor || (typeof navigator !== 'undefined' && navigator.userAgent && navigator.userAgent.includes('Android')));
-    if (isMobile) {
-        return CLOUD_TUNNEL_URL;
+    // 3. Native Mobile App (Capacitor) -> Default to Local Wi-Fi if on hotspot, or Cloud Tunnel
+    if (isNativeApp()) {
+        return LOCAL_WIFI_URL;
     }
 
     // 4. Remote Web Production (e.g., Vercel https://*.vercel.app)
@@ -60,12 +67,17 @@ export const setCustomApiUrl = (url) => {
 };
 
 const filterCandidatesForEnvironment = (list) => {
+    // In native Android app, cleartext traffic is explicitly permitted in AndroidManifest.xml
+    if (isNativeApp()) {
+        return list.filter(Boolean);
+    }
+
     const isHttps = isHttpsOrigin();
     const isRemote = isRemoteWeb();
 
     return list.filter(url => {
         if (!url) return false;
-        // If loaded on an HTTPS website (like Vercel), block insecure HTTP targets to prevent Mixed Content security errors
+        // If loaded on an HTTPS remote website (like Vercel in browser), block insecure HTTP targets to prevent Mixed Content security errors
         if ((isHttps || isRemote) && url.startsWith('http://') && !url.includes('localhost') && !url.includes('127.0.0.1')) {
             return false;
         }
@@ -87,24 +99,21 @@ export const testServerConnection = async (specificUrl = null) => {
         }
     }
 
-    // Test candidate endpoints in order: Saved -> Cloud Tunnel -> Render Cloud -> Local Wi-Fi -> Localhost
     const saved = localStorage.getItem('truthlens_custom_api_url');
-    const rawCandidates = [
-        saved,
-        CLOUD_TUNNEL_URL,
-        RENDER_API_URL,
-        LOCAL_WIFI_URL,
-        LOCAL_WEB_URL,
-        EMULATOR_URL
-    ];
+    
+    // Priority order:
+    // If native app on phone hotspot: test LOCAL_WIFI_URL first, then CLOUD_TUNNEL, then RENDER
+    const rawCandidates = isNativeApp()
+        ? [saved, LOCAL_WIFI_URL, CLOUD_TUNNEL_URL, RENDER_API_URL, EMULATOR_URL, LOCAL_WEB_URL]
+        : [saved, CLOUD_TUNNEL_URL, RENDER_API_URL, LOCAL_WIFI_URL, LOCAL_WEB_URL];
 
     const candidates = filterCandidatesForEnvironment(rawCandidates);
 
-    for (const url of candidates) {
+    for (const url of Array.from(new Set(candidates.filter(Boolean)))) {
         try {
             const target = url.replace(/\/$/, '');
             const res = await axios.get(`${target}/`, {
-                timeout: 3500,
+                timeout: 3000,
                 headers: { 'bypass-tunnel-reminder': 'true' }
             });
             if (res.status === 200) {
@@ -120,24 +129,21 @@ export const testServerConnection = async (specificUrl = null) => {
 
 /**
  * Intelligent API Request Wrapper with Automatic Fallback
- * Tries candidates dynamically, skipping mixed-content blockers
+ * Tries candidates dynamically across Wi-Fi LAN, Cloud Tunnel, and Cloud Backend
  */
 export const apiRequest = async (endpoint, options = {}) => {
     const primary = getApiBaseUrl();
-    const rawCandidates = [
-        primary,
-        CLOUD_TUNNEL_URL,
-        RENDER_API_URL,
-        LOCAL_WIFI_URL,
-        LOCAL_WEB_URL,
-        EMULATOR_URL
-    ];
+    const saved = localStorage.getItem('truthlens_custom_api_url');
+    
+    const rawCandidates = isNativeApp()
+        ? [primary, saved, LOCAL_WIFI_URL, CLOUD_TUNNEL_URL, RENDER_API_URL, EMULATOR_URL, LOCAL_WEB_URL]
+        : [primary, saved, CLOUD_TUNNEL_URL, RENDER_API_URL, LOCAL_WIFI_URL, LOCAL_WEB_URL];
 
     const validCandidates = filterCandidatesForEnvironment(rawCandidates);
-    const bases = Array.from(new Set(validCandidates));
+    const bases = Array.from(new Set(validCandidates.filter(Boolean)));
 
     let lastErr = null;
-    const perAttemptTimeout = options.timeout || 12000;
+    const perAttemptTimeout = options.timeout || 10000;
 
     for (const base of bases) {
         try {
