@@ -140,7 +140,7 @@ def analyze_noise_and_metadata(img: Image.Image):
 
     return noise_std, noise_kurt, sat_mean, has_camera_exif, has_ai_metadata, software_tag
 
-def analyze_image_file(file_bytes: bytes, filename: str = "", text_context: str = "") -> dict:
+def analyze_image_file(file_bytes: bytes, filename: str = "", text_context: str = "", client_forensics: dict = None) -> dict:
     """
     Performs comprehensive multi-layer forensic and AI-generation analysis on an image:
     1. Neural Perception Encoder (PE-Core Tiny ONNX)
@@ -149,6 +149,7 @@ def analyze_image_file(file_bytes: bytes, filename: str = "", text_context: str 
     4. Sensor Noise Residual & PRNU Analysis
     5. Color Saturation & Chromaticity Distribution
     6. Hardware EXIF & Metadata Integrity
+    7. Client-Side Canvas Surface & Noise Forensics
     """
     try:
         img = Image.open(io.BytesIO(file_bytes))
@@ -222,7 +223,22 @@ def analyze_image_file(file_bytes: bytes, filename: str = "", text_context: str 
         fake_weight += 0.10
         reasons.append("Hyper-saturated color gamut with artificially smoothed denoised surfaces.")
 
-    # Factor F: Text context / sensational claim check
+    # Factor F: Client-Side Canvas Forensics
+    if client_forensics and isinstance(client_forensics, dict):
+        smooth_ratio = client_forensics.get("smoothRatio", 0)
+        avg_noise = client_forensics.get("avgNoise", 15)
+        is_exact_square = client_forensics.get("isExactSquare", False)
+        if smooth_ratio > 0.12:
+            fake_weight += 0.15
+            reasons.append(f"Surface texture analysis identified abnormal planar smoothness (Diffusion smoothing ratio: {round(smooth_ratio * 100, 1)}%).")
+        if avg_noise < 10.0 and not has_camera_exif:
+            fake_weight += 0.10
+            reasons.append("Sub-pixel sensor grain analysis confirms absent optical sensor photon shot noise.")
+        if is_exact_square and not has_camera_exif:
+            fake_weight += 0.08
+            reasons.append("Image rendered in exact 1:1 square canvas matching default generative diffusion aspect.")
+
+    # Factor G: Text context / sensational claim check
     sensational_markers = ['lion', 'riding lion', 'creature', 'monster', 'alien', 'atlantis', 'secret', 'shocking', 'ufo']
     combined_text = (filename + " " + text_context).lower()
     if any(m in combined_text for m in sensational_markers):

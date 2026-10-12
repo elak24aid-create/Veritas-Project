@@ -178,6 +178,7 @@ async def detect_image_endpoint(
     text: str = Form(""),
     username: str = Form("elak24aid"),
     input_type: str = Form("Image OCR"),
+    forensics: str = Form(None),
     db: Session = Depends(get_db)
 ):
     try:
@@ -185,11 +186,19 @@ async def detect_image_endpoint(
         if not content_bytes or len(content_bytes) < 10:
             raise HTTPException(status_code=400, detail="Empty or invalid image file uploaded.")
 
+        client_forensics = None
+        if forensics:
+            try:
+                client_forensics = json.loads(forensics)
+            except Exception:
+                pass
+
         # Run multi-layered AI image detection & forensic analysis
         forensic_res = analyze_image_file(
             file_bytes=content_bytes,
             filename=file.filename or "uploaded_image.png",
-            text_context=text or ""
+            text_context=text or "",
+            client_forensics=client_forensics
         )
 
         prediction = forensic_res["prediction"]
