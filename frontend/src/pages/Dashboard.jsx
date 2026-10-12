@@ -13,6 +13,7 @@ import {
     apiRequest,
     setCustomApiUrl,
     testServerConnection,
+    VERCEL_CLOUD_URL,
     CLOUD_TUNNEL_URL,
     LOCAL_WIFI_URL,
     EMULATOR_URL
@@ -233,17 +234,34 @@ const Dashboard = () => {
         setNewsLoading(true);
         try {
             const res = await apiRequest(`/api/daily-news?category=${encodeURIComponent(cat)}&language=${encodeURIComponent(lang)}&force=${force}`, { method: 'GET' });
-            if (res.data && res.data.data) {
+            if (res.data && res.data.data && res.data.data.length > 0) {
                 setDailyNews(res.data.data);
                 setLastUpdatedTime(res.data.last_updated || new Date().toISOString().slice(0, 19).replace('T', ' '));
                 refreshSecRef.current = 300;
                 setNextRefreshSec(300);
                 setServerOnline(true);
                 setServerUrl(getApiBaseUrl());
+                return;
             }
         } catch (err) {
-            console.error('Failed to fetch daily news feed', err);
-            setServerOnline(false);
+            console.warn('Primary apiRequest failed, trying direct Vercel cloud news feed...', err);
+            try {
+                const cloudRes = await axios.get(`${VERCEL_CLOUD_URL}/api/daily-news?category=${encodeURIComponent(cat)}&language=${encodeURIComponent(lang)}&force=${force}`, {
+                    timeout: 7000
+                });
+                if (cloudRes.data && cloudRes.data.data && cloudRes.data.data.length > 0) {
+                    setDailyNews(cloudRes.data.data);
+                    setLastUpdatedTime(cloudRes.data.last_updated || new Date().toISOString().slice(0, 19).replace('T', ' '));
+                    refreshSecRef.current = 300;
+                    setNextRefreshSec(300);
+                    setServerOnline(true);
+                    setServerUrl(VERCEL_CLOUD_URL);
+                    return;
+                }
+            } catch (cloudErr) {
+                console.error('All live news endpoints failed', cloudErr);
+                setServerOnline(false);
+            }
         } finally {
             setNewsLoading(false);
         }
@@ -288,7 +306,7 @@ const Dashboard = () => {
         localStorage.setItem('truthlens_news_lang', langCode);
         refreshSecRef.current = 300;
         setNextRefreshSec(300);
-        loadDailyNews(selectedCategory, false, langCode);
+        loadDailyNews(selectedCategory, true, langCode);
         const langObj = NEWS_LANGUAGES.find(l => l.code === langCode);
         showToast(`News language switched to ${langObj?.name || langCode}`);
     };
@@ -298,7 +316,7 @@ const Dashboard = () => {
         setSelectedCategory(cat);
         refreshSecRef.current = 300;
         setNextRefreshSec(300);
-        loadDailyNews(cat, false, newsLanguage);
+        loadDailyNews(cat, true, newsLanguage);
     };
 
     // Load History with Auto-Fallback
@@ -2136,7 +2154,21 @@ const Dashboard = () => {
 
                             <div className="flex flex-col gap-1.5 pt-1">
                                 <span className="text-[11px] font-semibold opacity-75">Switch Server:</span>
-                                <div className="grid grid-cols-2 gap-2">
+                                <div className="grid grid-cols-3 gap-2">
+                                    <button
+                                        type="button"
+                                        onClick={async () => {
+                                            setCustomApiUrl(VERCEL_CLOUD_URL);
+                                            setServerUrl(VERCEL_CLOUD_URL);
+                                            const ok = await testServerConnection(VERCEL_CLOUD_URL);
+                                            setServerOnline(ok);
+                                            showToast(ok ? 'Connected to Vercel Cloud (24/7)' : 'Cloud endpoint not responding');
+                                            loadDailyNews(selectedCategory, true, newsLanguage);
+                                        }}
+                                        className="py-1.5 px-2 rounded-lg bg-emerald-600/20 hover:bg-emerald-600/35 border border-emerald-500/40 text-[11px] font-semibold text-center text-emerald-400 transition-colors"
+                                    >
+                                        ☁️ Vercel Cloud
+                                    </button>
                                     <button
                                         type="button"
                                         onClick={async () => {

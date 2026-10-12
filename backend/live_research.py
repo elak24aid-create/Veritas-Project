@@ -38,20 +38,36 @@ CATEGORY_FALLBACK_QUERIES = {
     "Business": "business+economy+when:6h"
 }
 
-# Category search keywords for multilingual Google News searches
-CATEGORY_SEARCH_KEYWORDS = {
-    "All": "",
-    "Political": "politics",
-    "Healthcare": "health",
-    "Science": "science",
-    "Government": "government",
-    "Crime": "crime",
-    "World": "world",
-    "India": "india",
-    "Weather": "weather",
-    "Sports": "sports",
-    "Business": "business"
+# Category to official Google News RSS Topic Sections (Supported natively across all languages)
+TOPIC_SECTIONS = {
+    "Political": "POLITICS",
+    "Government": "POLITICS",
+    "Healthcare": "HEALTH",
+    "Science": "SCIENCE",
+    "World": "WORLD",
+    "India": "NATION",
+    "Sports": "SPORTS",
+    "Business": "BUSINESS"
 }
+
+# Native keywords for categories that don't have a direct topic section (Crime, Weather)
+NATIVE_KEYWORDS = {
+    "Crime": {
+        "en": "crime investigation", "ta": "குற்றம்", "hi": "अपराध", "ml": "കുറ്റകൃത്യം",
+        "te": "నేరం", "kn": "ಅಪರಾಧ", "bn": "অপরাধ", "mr": "गुन्हेगारी",
+        "gu": "ગુનો", "pa": "ਜੁਰਮ", "ur": "جرم", "ja": "事件",
+        "es": "crimen", "fr": "crime", "de": "kriminalität", "ru": "преступность",
+        "zh": "犯罪", "ar": "جريمة"
+    },
+    "Weather": {
+        "en": "weather forecast", "ta": "வானிலை", "hi": "मौसम", "ml": "കാലാവസ്ഥ",
+        "te": "వాతావరణం", "kn": "ಹವಾಮಾನ", "bn": "আবহাওয়া", "mr": "हवामान",
+        "gu": "હવામાન", "pa": "ਮੌਸਮ", "ur": "موسم", "ja": "天気",
+        "es": "clima", "fr": "météo", "de": "wetter", "ru": "погода",
+        "zh": "天气", "ar": "طقس"
+    }
+}
+
 
 # Multilingual Google News RSS Configuration
 LANGUAGE_CONFIG = {
@@ -200,19 +216,18 @@ def fetch_category_news(category: str = "All", language: str = "en", limit: int 
     ceid = cfg["ceid"]
     locale = f"hl={hl}&gl={gl}&ceid={ceid}"
 
-    if lang_code == "en":
-        # English feeds
-        loc = "hl=en-IN&gl=IN&ceid=IN:en" if category == "India" else "hl=en-US&gl=US&ceid=US:en"
-        query = CATEGORY_QUERIES.get(category, "breaking+news+when:2h")
-        url = f"https://news.google.com/rss/search?q={query}&{loc}"
+    if category == "All":
+        url = f"https://news.google.com/rss?{locale}"
+    elif category in TOPIC_SECTIONS:
+        sec = TOPIC_SECTIONS[category]
+        url = f"https://news.google.com/rss/headlines/section/topic/{sec}?{locale}"
+    elif category in NATIVE_KEYWORDS:
+        kw = NATIVE_KEYWORDS[category].get(lang_code, NATIVE_KEYWORDS[category].get("en", category.lower()))
+        query = urllib.parse.quote(kw)
+        url = f"https://news.google.com/rss/search?q={query}&{locale}"
     else:
-        # Non-English feeds (Tamil, Hindi, Malayalam, Japanese, Spanish, etc.)
-        if category == "All":
-            # Top breaking headlines feed for the target language
-            url = f"https://news.google.com/rss?{locale}"
-        else:
-            cat_keyword = CATEGORY_SEARCH_KEYWORDS.get(category, category.lower())
-            url = f"https://news.google.com/rss/search?q={cat_keyword}&{locale}"
+        query = urllib.parse.quote(category.lower())
+        url = f"https://news.google.com/rss/search?q={query}&{locale}"
 
     try:
         res = requests.get(url, headers=headers, timeout=6)
@@ -221,19 +236,13 @@ def fetch_category_news(category: str = "All", language: str = "en", limit: int 
     except Exception as e:
         print(f"Error fetching fresh feed {category} [{lang_code}]: {e}")
 
-    # Fallback to wider window or top stories if too few items
+    # Fallback to top stories for that language if too few items returned
     if len(collected) < 4:
-        if lang_code == "en":
-            fallback_query = CATEGORY_FALLBACK_QUERIES.get(category, "breaking+news+when:6h")
-            fallback_url = f"https://news.google.com/rss/search?q={fallback_query}&{locale}"
-        else:
-            fallback_url = f"https://news.google.com/rss?{locale}"
-
+        fallback_url = f"https://news.google.com/rss?{locale}"
         try:
             res_fb = requests.get(fallback_url, headers=headers, timeout=6)
             if res_fb.status_code == 200:
                 fb_items = parse_rss_items(res_fb.content, default_category=category, limit=limit)
-                # Combine & deduplicate by title
                 existing_titles = set(item["title"] for item in collected)
                 for it in fb_items:
                     if it["title"] not in existing_titles:
