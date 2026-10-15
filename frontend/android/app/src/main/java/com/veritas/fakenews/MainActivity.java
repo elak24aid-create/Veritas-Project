@@ -43,7 +43,7 @@ public class MainActivity extends BridgeActivity {
     public void onStart() {
         super.onStart();
         if (bridge != null && bridge.getWebView() != null) {
-            bridge.getWebView().setWebChromeClient(new WebChromeClient() {
+            bridge.getWebView().setWebChromeClient(new com.getcapacitor.BridgeWebChromeClient(bridge) {
                 @Override
                 public void onPermissionRequest(final PermissionRequest request) {
                     runOnUiThread(() -> {

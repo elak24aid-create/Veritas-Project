@@ -1688,13 +1688,13 @@ const Dashboard = () => {
                             </div>
                         )}
 
-                        {/* MODE 2: PURE IMAGE OCR INPUT (Direct Touch-Safe Native Upload & Real Forensics) */}
+                        {/* MODE 2: PURE IMAGE OCR INPUT (Dedicated Device File/Gallery Upload) */}
                         {checkSubTab === 'ocr' && (
                             <div className="card-dark p-5 flex flex-col items-center justify-center min-h-[240px] shadow-lg">
                                 {!ocrImageFile ? (
                                     <div className="w-full flex flex-col gap-3">
                                         {/* Main Drop / Tap Zone with Invisible Native Input Overlay */}
-                                        <div className="relative w-full py-8 px-4 rounded-2xl border-2 border-dashed border-blue-500/40 hover:border-blue-500 bg-blue-500/5 hover:bg-blue-500/10 cursor-pointer flex flex-col items-center justify-center gap-3 transition-all group overflow-hidden">
+                                        <div className="relative w-full py-9 px-4 rounded-2xl border-2 border-dashed border-blue-500/40 hover:border-blue-500 bg-blue-500/5 hover:bg-blue-500/10 cursor-pointer flex flex-col items-center justify-center gap-3 transition-all group overflow-hidden">
                                             <input
                                                 type="file"
                                                 accept="image/*"
@@ -1708,36 +1708,21 @@ const Dashboard = () => {
                                             </div>
                                             <div className="text-center pointer-events-none">
                                                 <span className="text-sm font-bold text-blue-500 block">{t.chooseImage}</span>
-                                                <span className="text-xs opacity-60 block mt-0.5">Tap anywhere to browse phone gallery or files</span>
+                                                <span className="text-xs opacity-60 block mt-0.5">Tap anywhere to browse photo gallery or files</span>
                                             </div>
                                         </div>
 
-                                        {/* Dedicated Mobile Action Buttons for Gallery & Live Camera */}
-                                        <div className="grid grid-cols-2 gap-2.5 w-full">
-                                            <label className="relative overflow-hidden cursor-pointer flex items-center justify-center gap-2 py-2.5 px-3 rounded-xl bg-blue-500/10 hover:bg-blue-500/20 text-blue-500 border border-blue-500/20 text-xs font-bold transition-all">
-                                                <input
-                                                    type="file"
-                                                    accept="image/*"
-                                                    onChange={handleImageFileChange}
-                                                    className="absolute inset-0 opacity-0 cursor-pointer w-full h-full"
-                                                />
-                                                <ImageIcon size={15} />
-                                                <span>Photo Gallery</span>
-                                            </label>
-
-                                            <label className="relative overflow-hidden cursor-pointer flex items-center justify-center gap-2 py-2.5 px-3 rounded-xl bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-500 border border-emerald-500/20 text-xs font-bold transition-all">
-                                                <input
-                                                    type="file"
-                                                    accept="image/*"
-                                                    capture="environment"
-                                                    ref={cameraInputRef}
-                                                    onChange={handleImageFileChange}
-                                                    className="absolute inset-0 opacity-0 cursor-pointer w-full h-full"
-                                                />
-                                                <Camera size={15} />
-                                                <span>Take Photo</span>
-                                            </label>
-                                        </div>
+                                        {/* Prominent Browse Gallery Button */}
+                                        <label className="relative overflow-hidden cursor-pointer flex items-center justify-center gap-2 py-3 px-4 rounded-xl bg-blue-500/10 hover:bg-blue-500/20 active:scale-[0.98] text-blue-500 border border-blue-500/30 text-xs font-bold transition-all w-full shadow-sm">
+                                            <input
+                                                type="file"
+                                                accept="image/*"
+                                                onChange={handleImageFileChange}
+                                                className="absolute inset-0 opacity-0 cursor-pointer w-full h-full z-10"
+                                            />
+                                            <ImageIcon size={16} />
+                                            <span>Browse Device Gallery / Photos</span>
+                                        </label>
                                     </div>
                                 ) : (
                                     <div className="w-full flex flex-col gap-3">
@@ -1809,26 +1794,16 @@ const Dashboard = () => {
                                             </div>
                                         </div>
 
-                                        <div className="flex items-center justify-center gap-3">
-                                            <label className="relative overflow-hidden cursor-pointer text-xs text-blue-500 font-semibold hover:underline">
+                                        <div className="flex items-center justify-center">
+                                            <label className="relative overflow-hidden cursor-pointer text-xs text-blue-500 font-semibold hover:underline inline-flex items-center gap-1.5 py-1 px-2 rounded-lg hover:bg-blue-500/10 transition-colors">
                                                 <input
                                                     type="file"
                                                     accept="image/*"
                                                     onChange={handleImageFileChange}
                                                     className="absolute inset-0 opacity-0 cursor-pointer w-full h-full"
                                                 />
-                                                Choose Another Photo
-                                            </label>
-                                            <span className="opacity-30">•</span>
-                                            <label className="relative overflow-hidden cursor-pointer text-xs text-emerald-500 font-semibold hover:underline">
-                                                <input
-                                                    type="file"
-                                                    accept="image/*"
-                                                    capture="environment"
-                                                    onChange={handleImageFileChange}
-                                                    className="absolute inset-0 opacity-0 cursor-pointer w-full h-full"
-                                                />
-                                                Take New Photo
+                                                <ImageIcon size={13} />
+                                                <span>Choose Different Photo from Gallery</span>
                                             </label>
                                         </div>
                                     </div>
