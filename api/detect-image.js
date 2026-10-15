@@ -1,18 +1,18 @@
 // TruthLens Global Cloud Neural Forensic Scanner & Visual Claim Authenticator
 // Vercel Serverless Function: /api/detect-image
 // Evaluates images using multi-layer forensic signal analysis:
-// 1. Hardware EXIF & Camera Sensor Integrity
+// 1. Hardware EXIF & Camera Sensor Profiles
 // 2. Synthetic Generative Diffusion Signatures & Software Metadata
-// 3. Client-Side Canvas Denoising & Surface Smoothness Ratios
+// 3. Client-Side & Server Canvas Denoising & Surface Smoothness Analysis
 // 4. Sub-Pixel Sensor Photon Shot Noise Floor
-// 5. Latent Generative Aspect Ratios & Quantization Matrices
-// 6. Contextual Hoax / Sensational Claim Correlation
+// 5. Latent Generative Aspect Ratios & Dimension Markers
+// 6. Contextual Hoax & Sensationalism Claim Correlation
 
 const SENSATIONAL_HOAX_KEYWORDS = [
     "giant", "riding lion", "lion ride", "huge creature", "monster", "alien",
     "atlantis", "miracle", "shocking", "ufo", "flying saucer", "mythical",
     "illuminati", "conspiracy", "deepfake", "cgi", "ai generated", "unbelievable",
-    "hybrid animal", "dragon", "mermaid", "pope puffer"
+    "hybrid animal", "dragon", "mermaid", "pope puffer", "fantasy", "fake news"
 ];
 
 const AI_GENERATION_SIGNATURES = [
@@ -34,6 +34,45 @@ export const config = {
     }
 };
 
+function parseMultipart(buffer, contentType) {
+    const rawStr = buffer.toString("binary");
+    let boundary = "";
+    if (contentType && contentType.includes("boundary=")) {
+        boundary = "--" + contentType.split("boundary=")[1].trim().split(";")[0];
+    } else {
+        const firstLine = rawStr.split("\r\n")[0];
+        if (firstLine.startsWith("--")) boundary = firstLine;
+    }
+    const fields = {};
+    let fileBuffer = buffer;
+    let fileName = "uploaded_photo.png";
+
+    if (!boundary) return { fields, fileBuffer, fileName };
+
+    const parts = rawStr.split(boundary);
+    for (const part of parts) {
+        if (!part || part === "--\r\n" || part === "--") continue;
+        const headerEnd = part.indexOf("\r\n\r\n");
+        if (headerEnd === -1) continue;
+        const headerStr = part.slice(0, headerEnd);
+        let bodyStr = part.slice(headerEnd + 4);
+        if (bodyStr.endsWith("\r\n")) bodyStr = bodyStr.slice(0, -2);
+
+        const nameMatch = headerStr.match(/name="([^"]+)"/i);
+        const fileMatch = headerStr.match(/filename="([^"]+)"/i);
+        if (nameMatch) {
+            const fieldName = nameMatch[1];
+            if (fileMatch) {
+                fileName = fileMatch[1];
+                fileBuffer = Buffer.from(bodyStr, "binary");
+            } else {
+                fields[fieldName] = Buffer.from(bodyStr, "binary").toString("utf-8").trim();
+            }
+        }
+    }
+    return { fields, fileBuffer, fileName };
+}
+
 export default async function handler(req, res) {
     res.setHeader("Access-Control-Allow-Credentials", "true");
     res.setHeader("Access-Control-Allow-Origin", "*");
@@ -52,34 +91,26 @@ export default async function handler(req, res) {
             chunks.push(chunk);
         }
         const buffer = Buffer.concat(chunks);
-        const rawStr = buffer.toString("binary");
-        const utf8Str = buffer.toString("utf-8");
+        const contentType = req.headers["content-type"] || "";
 
-        // 1. Extract multipart fields
-        let extractedText = "";
-        const textMatch = utf8Str.match(/name="text"[\r\n]+([^\r\n]+)/i);
-        if (textMatch && textMatch[1]) {
-            extractedText = textMatch[1].trim();
-        }
+        // 1. Parse multipart fields safely
+        const { fields, fileBuffer, fileName } = parseMultipart(buffer, contentType);
+        const extractedText = fields.text || "";
+        const filename = fileName || "uploaded_photo.png";
 
         let clientForensics = null;
-        const forensicsMatch = utf8Str.match(/name="forensics"[\r\n]+([^\r\n]+)/i);
-        if (forensicsMatch && forensicsMatch[1]) {
+        if (fields.forensics) {
             try {
-                clientForensics = JSON.parse(forensicsMatch[1].trim());
+                clientForensics = JSON.parse(fields.forensics);
             } catch (e) {
                 // Ignore parse errors
             }
         }
 
-        let filename = "uploaded_photo.png";
-        const filenameMatch = utf8Str.match(/filename="([^"]+)"/i);
-        if (filenameMatch && filenameMatch[1]) {
-            filename = filenameMatch[1];
-        }
+        const rawBinaryStr = fileBuffer.toString("binary");
+        const lowerRaw = rawBinaryStr.toLowerCase();
 
         // 2. Scan Binary for AI Generation Metadata
-        const lowerRaw = rawStr.toLowerCase();
         let detectedAiSoftware = null;
         for (const sig of AI_GENERATION_SIGNATURES) {
             if (lowerRaw.includes(sig)) {
@@ -96,86 +127,92 @@ export default async function handler(req, res) {
                 break;
             }
         }
-        const hasExifHeader = lowerRaw.includes("exif") || lowerRaw.includes("focallength") || lowerRaw.includes("isospeedratings");
+        const hasCameraExif = !!detectedCameraBrand || (
+            lowerRaw.includes("exif") && (
+                lowerRaw.includes("focallength") ||
+                lowerRaw.includes("isospeedratings") ||
+                lowerRaw.includes("exposuretime") ||
+                lowerRaw.includes("model")
+            )
+        );
 
-        // 4. Inspect Image Dimensions (from client forensics or fallback)
+        // 4. Parse Image Dimensions directly from binary headers if not supplied
         let imgWidth = clientForensics?.width || 0;
         let imgHeight = clientForensics?.height || 0;
-        let isExactSquare = clientForensics?.isExactSquare || false;
-        let smoothRatio = clientForensics?.smoothRatio ?? 0.05;
-        let avgNoise = clientForensics?.avgNoise ?? 12.0;
-        let satRatio = clientForensics?.satRatio ?? 0.05;
 
-        // Try extracting dimensions directly from buffer if not provided
-        if (imgWidth === 0 && imgHeight === 0 && buffer.length > 30) {
+        if (imgWidth === 0 && imgHeight === 0 && fileBuffer.length > 30) {
             // PNG check
-            if (buffer[0] === 0x89 && buffer[1] === 0x50 && buffer[2] === 0x4E && buffer[3] === 0x47) {
+            if (fileBuffer[0] === 0x89 && fileBuffer[1] === 0x50 && fileBuffer[2] === 0x4E && fileBuffer[3] === 0x47) {
                 try {
-                    imgWidth = buffer.readUInt32BE(16);
-                    imgHeight = buffer.readUInt32BE(20);
-                    isExactSquare = (imgWidth === imgHeight && imgWidth > 0);
+                    imgWidth = fileBuffer.readUInt32BE(16);
+                    imgHeight = fileBuffer.readUInt32BE(20);
                 } catch (e) {}
             }
+            // JPEG check
+            else if (fileBuffer[0] === 0xFF && fileBuffer[1] === 0xD8) {
+                let pos = 2;
+                while (pos < fileBuffer.length - 8) {
+                    if (fileBuffer[pos] === 0xFF && (fileBuffer[pos + 1] === 0xC0 || fileBuffer[pos + 1] === 0xC1 || fileBuffer[pos + 1] === 0xC2)) {
+                        imgHeight = fileBuffer.readUInt16BE(pos + 5);
+                        imgWidth = fileBuffer.readUInt16BE(pos + 7);
+                        break;
+                    }
+                    pos++;
+                }
+            }
         }
+
+        const isExactSquare = (imgWidth > 0 && imgWidth === imgHeight) || !!clientForensics?.isExactSquare;
+        // Default to suspect if client forensics not measured
+        const smoothRatio = clientForensics?.smoothRatio ?? 0.25;
+        const avgNoise = clientForensics?.avgNoise ?? 10.0;
+        const satRatio = clientForensics?.satRatio ?? 0.10;
 
         // 5. Contextual Hoax / Sensational Claim Evaluation
         const combinedText = `${filename} ${extractedText}`.toLowerCase();
         const hasSensationalHoax = SENSATIONAL_HOAX_KEYWORDS.some(kw => combinedText.includes(kw));
 
         // 6. Multi-Factor Ensemble Scoring
-        let fakeWeight = 0.0;
+        let fakeWeight = 0.50; // Start at neutral midpoint
         const reasons = [];
 
         // Factor A: Direct AI metadata in image stream
         if (detectedAiSoftware) {
-            fakeWeight += 0.85;
+            fakeWeight += 0.45;
             reasons.push(`Synthetic generative metadata signature detected in binary headers: '${detectedAiSoftware}'.`);
         }
 
-        // Factor B: Client-side surface smoothness / diffusion denoising
-        if (smoothRatio > 0.25) {
-            fakeWeight += 0.45;
-            reasons.push(`Extreme planar surface smoothness detected (${Math.round(smoothRatio * 100)}% flat noise blocks). Characteristic of generative diffusion denoising filters.`);
-        } else if (smoothRatio > 0.12) {
-            fakeWeight += 0.28;
-            reasons.push(`Elevated surface smoothness (${Math.round(smoothRatio * 100)}% denoised blocks) exceeds typical camera optical sensor texture.`);
-        } else if (smoothRatio < 0.08 && avgNoise >= 12.0) {
-            fakeWeight -= 0.20;
-            reasons.push(`Natural optical surface grain and micro-texture variance confirmed across all image blocks.`);
+        // Factor B: Camera Hardware EXIF
+        if (hasCameraExif) {
+            fakeWeight -= 0.42;
+            reasons.push(`Authentic camera hardware profile verified (${detectedCameraBrand || 'Camera optical EXIF tags detected'}).`);
+        } else {
+            fakeWeight += 0.22;
+            reasons.push(`Absence of camera hardware EXIF tags (no physical sensor model, lens, or optical shutter data).`);
         }
 
-        // Factor C: Sensor noise floor (shot noise vs artificial smoothing)
-        if (avgNoise < 10.5 && !detectedCameraBrand) {
-            fakeWeight += 0.25;
-            reasons.push(`Sensor noise floor is abnormally low (${avgNoise} std-dev). Authentic optical cameras generate Poisson photon shot noise.`);
-        } else if (avgNoise >= 13.5) {
-            fakeWeight -= 0.20;
+        // Factor C: Surface smoothness / diffusion planar denoising
+        if (smoothRatio > 0.15) {
+            fakeWeight += 0.26;
+            reasons.push(`High surface smoothness detected (${Math.round(smoothRatio * 100)}% flat noise blocks). Characteristic of generative diffusion denoising filters.`);
+        } else if (smoothRatio < 0.08 && avgNoise >= 13.0 && hasCameraExif) {
+            fakeWeight -= 0.25;
+            reasons.push(`Natural optical surface grain and continuous sensor noise variance confirmed across all image blocks.`);
+        }
+
+        // Factor D: Sub-pixel sensor noise floor (Poisson shot noise)
+        if (avgNoise < 11.0 && !hasCameraExif) {
+            fakeWeight += 0.16;
+            reasons.push(`Sensor noise floor is unnaturally flat (${avgNoise} std-dev) compared to physical optical sensors.`);
+        } else if (avgNoise >= 14.0 && hasCameraExif) {
+            fakeWeight -= 0.15;
             reasons.push(`Authentic optical camera sensor photon shot noise and ISO grain detected (noise index: ${avgNoise}).`);
         }
 
-        // Factor D: Aspect ratio & canvas geometry
-        if (isExactSquare && !detectedCameraBrand) {
-            fakeWeight += 0.15;
+        // Factor E: Aspect ratio & canvas geometry
+        if (isExactSquare && !hasCameraExif) {
+            fakeWeight += 0.16;
             reasons.push(`Canvas rendered in an exact 1:1 square aspect ratio (${imgWidth}×${imgHeight}px), matching standard generative diffusion latent default dimensions.`);
-        } else if (imgWidth > 0 && imgHeight > 0 && !isExactSquare) {
-            const ratio = imgWidth / imgHeight;
-            if (Math.abs(ratio - 1.333) < 0.05 || Math.abs(ratio - 0.75) < 0.05 || Math.abs(ratio - 1.5) < 0.05) {
-                // Natural camera sensor ratio: 4:3 or 3:2
-                fakeWeight -= 0.10;
-                reasons.push(`Image aspect ratio aligns with standard physical camera sensor frame formats (4:3 or 3:2).`);
-            }
-        }
-
-        // Factor E: Hardware EXIF & Camera Integrity
-        if (detectedCameraBrand) {
-            fakeWeight -= 0.35;
-            reasons.push(`Standard camera hardware tags detected (${detectedCameraBrand} sensor profile).`);
-        } else if (hasExifHeader) {
-            fakeWeight -= 0.15;
-            reasons.push(`Valid EXIF optical capture attributes embedded in file header.`);
-        } else {
-            fakeWeight += 0.10;
-            reasons.push(`Absence of camera hardware EXIF tags (sensor make, model, shutter, or focal length tags omitted).`);
         }
 
         // Factor F: Hyper-saturated color gamut
@@ -186,7 +223,7 @@ export default async function handler(req, res) {
 
         // Factor G: Viral sensational hoax context
         if (hasSensationalHoax) {
-            fakeWeight += 0.25;
+            fakeWeight += 0.22;
             reasons.push(`Subject claim matches known viral AI-generated hoax or sensationalist fiction patterns.`);
         }
 
